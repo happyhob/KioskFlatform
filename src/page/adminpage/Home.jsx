@@ -18,6 +18,13 @@ const Home=()=>{
   const navigateToLogin = () => {
     navigate("/login");
   };
+  const navigateToJoin = () => {
+    navigate("/join");
+  };
+
+  const navigateToHome = () => {
+    navigate("/");
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -31,12 +38,14 @@ const Home=()=>{
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Button variant="h6" component="div" sx={{ flexGrow: 3 }}
+          onClick={navigateToHome}>
             Easy Make Kiosk 
-          </Typography>
+          </Button>
           <Button color="inherit"
           onClick={navigateToLogin}>Login</Button>
-          <Button color="inherit">Sign Up</Button>
+          <Button color="inherit"
+          onClick={navigateToJoin}>Sign Up</Button>
           
         </Toolbar>
       </AppBar>
