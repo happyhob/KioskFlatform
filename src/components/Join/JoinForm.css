@@ -30,15 +30,15 @@
     height: 100%;
     background: transparent;
     outline: none;
-    border: 2px solid rgba(255, 255, 255, .2);
+    border: 2px solid rgba(60, 41, 41, 0.2);
     border-radius: 40px;
     font-size: 16px;
-    color: #fff;
+    color: #000;
     padding: 20px 45px 20px 20px;
   }
   
   .input-box input::placeholder{
-    color: #fff;
+    color: #f48982;
   }
   
   .input-box .icon{
