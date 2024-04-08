@@ -18,6 +18,9 @@ const Home=()=>{
   const navigateToLogin = () => {
     navigate("/login");
   };
+  const navigateToJoin = () => {
+    navigate("/join");
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -36,8 +39,8 @@ const Home=()=>{
           </Typography>
           <Button color="inherit"
           onClick={navigateToLogin}>Login</Button>
-          <Button color="inherit">Sign Up</Button>
-          
+          <Button color="inherit"
+          onClick={navigateToJoin}>Sign up</Button>
         </Toolbar>
       </AppBar>
     </Box>

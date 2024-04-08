@@ -22,6 +22,7 @@ const JoinForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('회원가입 시도:', userData);
     joinApi(userData) // API 호출
       .then(response => {
         console.log('회원가입 성공:', response.data);
@@ -80,7 +81,7 @@ const JoinForm = () => {
             onChange={handleChange}
           />
         </div>
-        <button type="submit" className="login-button">Sign Up</button>
+        <button type="submit" className="signup-button">Sign Up</button>
       </form>
     </div>
   );

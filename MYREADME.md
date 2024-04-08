@@ -34,4 +34,4 @@ npm install sweetalert2-react-content
 npm install alert
 
 //react-icons 설피
-//npm install react-icons
+npm install react-icons

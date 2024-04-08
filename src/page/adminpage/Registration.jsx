@@ -1,9 +1,14 @@
-import React from 'react'
+// import React from 'react'
+// import RegistraionForm from '../../components/Registraion/JoinForm'
 
-const Registration = () => {
-  return (
-    <div>Registration</div>
-  )
-}
+// const Registration = () => {
+//   return (
+//     <>
+//         <div className='container'>
+//             <RegistrationForm />
+//         </div>
+//     </>
+//   )
+// }
 
-export default Registration
+// export default Registration
