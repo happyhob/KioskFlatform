@@ -8,6 +8,8 @@ import Home from './page/adminpage/Home'
 import Join from './page/adminpage/Join'
 import Login from './page/adminpage/Login'
 import Qr from './page/adminpage/Qr'
+import MenuBar from './page/adminpage/Menubar';
+
 import Registration from './page/adminpage/Registration'
 //import LoginContextProvider from '../Context/LoginContextProvider';
 import LoginContextProvider from './Context/LoginContextProvider';
@@ -75,7 +77,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/join" element={<Join />} />
-          <Route path="/qr/" element={<Qr />} />
+          <Route path="/qr" element={<Qr />} />
+          <Route path="/menu" element={<MenuBar />} />
         </Routes>
       </LoginContextProvider>
     </Router>
