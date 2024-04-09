@@ -31,8 +31,8 @@ const Join = () => {
       }
 
     } catch (error) {
-      console.error(`${error}`)
-      console.error(`회원가입 요청 중 에러가 발생하였습니다.`);
+      //console.error(`${error}`)
+      console.error(`회원가입 요청 중 에러가 발생하였습니다. : ${error}`);
       return
     }
   }
