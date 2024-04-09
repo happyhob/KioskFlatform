@@ -5,7 +5,7 @@ import api from "./api";
 
 // 로그인
 // export const login = (loginId, password) => api.post(`/login?username=${loginId}&password=${password}`, );
-export const login = (loginId, password) =>{ return  api.post('/login', {
+export const login = (loginId, password) =>{ return  api.post('http://61.81.99.104:8081/login', {
     "loginId":loginId,
     "password":password
 })
@@ -50,7 +50,7 @@ export const info = () => {return api.get("/users/info")}
 
 // 회원가입
 
-export const join = (LoginId, password, UserName, Email) => {return api.post("/join",
+export const join = (LoginId, password, UserName, Email) => {return api.post("http://61.81.99.104:8081/join",
     {
         "loginId":LoginId,
         "password":password,
