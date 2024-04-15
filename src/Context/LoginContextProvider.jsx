@@ -12,10 +12,8 @@ const LoginContextProvider = ({ children }) => {
 
   // 페이지 이동
   const navigate = useNavigate()
-
   // 로그인 여부
   const [isLogin, setIsLogin] = useState(false);
-
   // 유저 정보
   const [userInfo, setUserInfo] = useState({});
 
@@ -143,13 +141,6 @@ const LoginContextProvider = ({ children }) => {
     // 🍪 쿠키 지우기
 
   }
-
-  useEffect(() => {
-
-    // 로그인 체크
-    //loginCheck()
-
-  }, []);
 
   return (
       <LoginContext.Provider value={ {isLogin, userInfo, loginCheck, login, logout } }>
