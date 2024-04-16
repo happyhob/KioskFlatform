@@ -5,7 +5,11 @@ import api from "./api";
 
 // 로그인
 // export const login = (loginId, password) => api.post(`/login?username=${loginId}&password=${password}`, );
+<<<<<<< Updated upstream
 export const login = (loginId, password) =>{ return  api.post('http://61.81.99.104:8081/login', {
+=======
+export const login = (loginId, password) =>{ return  api.post('http://localhost:8081/login', {
+>>>>>>> Stashed changes
     "loginId":loginId,
     "password":password
 })
@@ -50,7 +54,11 @@ export const info = () => {return api.get("/users/info")}
 
 // 회원가입
 
+<<<<<<< Updated upstream
 export const join = (LoginId, password, UserName, Email) => {return api.post("http://61.81.99.104:8081/join",
+=======
+export const join = (LoginId, password, UserName, Email) => {return api.post("http://localhost:8081/join",
+>>>>>>> Stashed changes
     {
         "loginId":LoginId,
         "password":password,

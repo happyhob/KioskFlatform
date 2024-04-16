@@ -4,6 +4,38 @@ import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 
 const MenubarForm=()=> {
+<<<<<<< Updated upstream
+=======
+  const { isLogin, userInfo } = useContext(LoginContext);
+  const navigate = useNavigate();
+  const {open, setOpen} = useState(false);
+
+  const notLogin = () => {
+    // 로그인 페이지로 이동하는 함수
+    Swal.alert("로그인이 필요합니다", "로그인 화면으로 이동합니다.", "warning", () => {
+      navigate("/login");
+    });
+  };
+
+  const onRegistration = () => {
+    if (isLogin) {
+      // 로그인 상태일 때 상품 등록 페이지로 이동하는 로직
+      navigate("/registration");
+    } else {
+      // 로그인 상태가 아닐 때 로그인 페이지로 이동하는 로직
+      notLogin();
+    }
+  };
+  // const Item = styled(Paper)(({ theme }) => ({
+  //   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  //   ...theme.typography.body2,
+  //   padding: theme.spacing(1),
+  //   textAlign: 'center',
+  //   color: theme.palette.text.secondary,
+  // }));
+
+
+>>>>>>> Stashed changes
   return (
     <Box sx={{ minHeight: 200, flexGrow: 1, maxWidth: 400 }}>
     <dir>
