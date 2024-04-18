@@ -11,6 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LoginForm from '../../components/Login/LoginForm';
 import { useNavigate } from 'react-router-dom';
 import MenubarForm from '../../components/Menubar/MenubarForm';
+import RegistrationForm from '../../components/Registration/RegistrationForm';
 //https://mui.com/material-ui/react-app-bar/
 const Registration=()=>{
 
@@ -27,7 +28,7 @@ const Registration=()=>{
   }
 
   const navigateToRegistration = () => {
-    navigate("/Registration");
+    navigate("/registration");
   };
 
   const navigateToMenuForm = () => {
@@ -36,7 +37,7 @@ const Registration=()=>{
       navigate("/menu");
     }
     else{
-      navigate("/Registraion");
+      navigate("/registraion");
     }
   };
 
@@ -65,6 +66,7 @@ const Registration=()=>{
           onClick={navigateToLogout}>Logout</Button>
           
         </Toolbar>
+        <RegistrationForm/>
       </AppBar>
     </Box>
   )
