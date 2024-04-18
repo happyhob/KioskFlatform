@@ -1,16 +1,18 @@
 import React from 'react'
 // import Header from '../components/Header/Header'
-import LoginForm from '../../components/Login/LoginForm'
+import MenubarForm from '../../components/Menubar/MenubarForm'
 import Home from '../adminpage/Home';
-const Login = () => {
+
+
+const MenuBar = () => {
   return (
     <>
         <Home/>
         <div className='container'>
-            <LoginForm />
+            <MenubarForm />
         </div>
     </>
   )
 }
 
-export default Login
+export default MenuBar

@@ -1,9 +1,9 @@
 import Cookies from 'js-cookie';
 import React, { useContext, useEffect, useState } from 'react';
-import { LoginContext } from '../../Context/LoginContextProvider'
+import { LoginContext } from '../../Context/LoginContextProvider';
 import './LoginForm.css';
 import IdForm from "../Id/IdForm";
-import PwForm from "../Pw/PwForm";
+import PwForm from '../Pw/PwForm';
 import { FaUser, FaLock } from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
 
@@ -32,7 +32,7 @@ const LoginForm = () => {
 
   useEffect( () => {
     // 쿠키에서 저장된 아이디 가져오기
-    const remeberId = Cookies.get("rememberId")
+    const remeberId = Cookies.get("user_login")
     console.log(`쿠키 remeberId : ${remeberId}`);
     setRememberUserId(remeberId)
   }, [])
