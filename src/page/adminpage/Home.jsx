@@ -24,7 +24,6 @@ const Home=()=>{
   const navigateToJoin = () => {
     navigate("/join");
   };
-
   const navigateToHome = () => {
     navigate("/");
   };
@@ -37,7 +36,6 @@ const Home=()=>{
       navigate("/");
     }
   };
-
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -60,8 +58,7 @@ const Home=()=>{
           <Button color="inherit"
           onClick={navigateToLogin}>Login</Button>
           <Button color="inherit"
-          onClick={navigateToJoin}>Sign Up</Button>
-          
+          onClick={navigateToJoin}>Sign up</Button>
         </Toolbar>
       </AppBar>
     </Box>
