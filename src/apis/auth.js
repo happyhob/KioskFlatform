@@ -103,19 +103,19 @@ export const login = async (loginId, password) =>{ try {
 }
 
 // 사용자 정보
- export const info = () => {return api.post("/info")
-.then(response => {
-    const statusCode = response.status;
-    const responseData = response.data;
-    console.log(statusCode, responseData);
-    return { statusCode, responseData };
-})
-.catch(error => {
-    // 오류가 발생한 경우
-    console.error('Error during login request:', error);
-    // Promise로 오류 반환
-    throw error;
-  });
+ export const info = () => {return api.get("/info")
+// .then(response => {
+//     const statusCode = response.status;
+//     const responseData = response.data;
+//     console.log(statusCode, responseData);
+//     return { statusCode, responseData };
+// })
+// .catch(error => {
+//     // 오류가 발생한 경우
+//     console.error('Error during login request:', error);
+//     // Promise로 오류 반환
+//     throw error;
+//   });
 };
 
 //api.post(`/login?username=${loginId}&password=${password}`, )

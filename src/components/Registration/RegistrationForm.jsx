@@ -1,200 +1,19 @@
-import React, {useState} from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
-import { Home } from '@mui/icons-material';
-import axios from 'axios';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
+import React, { useState } from 'react';
+import { Box, Grid, TextField, Button, Tabs, Tab, Divider, IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-// //컴포넌트 스타일
-// const Item = styled(Paper)(({ theme }) => ({
-//   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-//   ...theme.typography.body2,
-//   padding: theme.spacing(1),
-//   textAlign: 'center',
-//   color: theme.palette.text.secondary,
-// }));
-
-// function RegistrationForm(props) {
-  
-//   const [categories, setCategories] = useState([]);
-//   const [contents, setContents] = useState({});
-//   const [selectedCategory, setSelectedCategory] = useState(null);
-//   const [newCategoryText, setNewCategoryText] = useState('');
-//   const [newContentText, setNewContentText] = useState('');
-
-//   //카테고리 추가
-//   const handleAddCategoryClick = () => {
-//     if (newCategoryText.trim() !== '') {            //새 카테고리 텍스트 empty확인
-//       const newCategories = [...categories, newCategoryText];       //기존 배열 복사 후 새 카테고리 추가
-//       setCategories(newCategories);                         //새로운 배열 추가
-//       setContents({ ...contents, [newCategoryText]: [] });  //개존의 context 객체 복사 후, 카테고리 내용 빈배열 초기화
-//       setNewCategoryText('');           //newCategoryText를 통해 초기화
-//     }
-//   };
-//   //키테고리 삭제
-//   const handleRemoveCategoryClick = (categoryToRemove) => {
-//     const newCategories = categories.filter(category => category !== categoryToRemove);
-//     setCategories(newCategories);
-
-//     if (selectedCategory === categoryToRemove) {
-//       setSelectedCategory(null);
-//     }
-
-//     const newContents = { ...contents };
-//     delete newContents[categoryToRemove];
-//     setContents(newContents);
-//   };
-//   //content 추가
-//   const handleAddContentClick = () => {
-//     if (selectedCategory !== null && newContentText.trim() !== '') {        //제거할 카테고리 필터링
-//       const newContents = { ...contents };
-//       newContents[selectedCategory] = [...(newContents[selectedCategory] || []), newContentText];
-//       setContents(newContents);
-//       setNewContentText('');
-//     }
-//   };
-//   //content 삭제
-//   const handleRemoveContentClick = (contentToRemove) => {
-//     if (selectedCategory !== null && contents[selectedCategory].includes(contentToRemove)) {
-//       const newContents = { ...contents };
-//       newContents[selectedCategory] = newContents[selectedCategory].filter(content => content !== contentToRemove);
-//       setContents(newContents);
-//     }
-//   };
-//   return (
-//     <>
-//       <Box sx={{ flexGrow: 1 }}>
-//       <Grid container spacing={2}>
-//         {/* 가게정보입력 */}
-//           <Grid item xs={6} md={12}>
-//             <Item>
-//               <label style={{ fontSize: '20px', color: 'RGB(150, 120, 100)', fontWeight: 'bold', marginRight: '40px' }}>가게정보입력</label>
-//               <TextField
-//                 id="standard-multiline-flexible"
-//                 label="가게 이름"
-//                 multilineㅈ
-//                 maxRows={4}
-//                 variant="standard"
-//                 style={{ marginRight: '15px' }} 
-//               />
-
-//               <TextField
-//                 id="standard-multiline-flexible"
-//                 label="가게 주소"
-//                 multiline
-//                 maxRows={4}
-//                 variant="standard"
-//                 style={{ marginRight: '15px' }} 
-//               />
-
-//               <TextField
-//                 id="standard-multiline-flexible"
-//                 label="가게 업종"
-//                 multiline
-//                 maxRows={4}
-//                 variant="standard"
-//                 style={{ marginRight: '15px' }} 
-//               />
-//               <TextField
-//                 id="standard-multiline-flexible"
-//                 label="가게 번호(010-xxxx-xxxx)"
-//                 multiline
-//                 maxRows={4}
-//                 variant="standard"
-//                 style={{ marginRight: '15px' }} 
-//               />
-
-//               <Button
-//                 size="large"
-//                 style={{ margin: '10px' }} 
-//               >등록</Button>
-//             </Item>
-//           </Grid>
-
-//           <Grid item xs={6} md={12}>
-//             <Item>
-//               <TextField
-//                 label="New Category"
-//                 variant="outlined"
-//                 size="small"
-//                 value={newCategoryText}
-//                 onChange={(e) => setNewCategoryText(e.target.value)}
-//               />
-//               <Button variant="outlined" style={{ marginRight: '50px', color: 'RGB(150, 100, 0)' }} size="large" onClick={handleAddCategoryClick}>
-//                 Add Category
-//               </Button>
-//             </Item>
-//           </Grid>
-
-//           <Grid item xs={6} md={12}>
-//             <Item>
-//               {selectedCategory && (
-//                 <Grid item xs={6} md={12}>
-//                   <Item>
-//                     <TextField
-//                       label="New Content"
-//                       variant="outlined"
-//                       size="small"
-//                       value={newContentText}
-//                       onChange={(e) => setNewContentText(e.target.value)}
-//                     />
-//                     <Button variant="outlined" style={{ marginRight: '50px', color: 'RGB(150, 100, 0)' }} size="large" onClick={handleAddContentClick}>
-//                       Add Content
-//                     </Button>
-//                   </Item>
-//                 </Grid>
-//               )}
-//             </Item>
-
-//             {categories.map((category, index) => (
-//               <Button key={index} size="large" onClick={() => setSelectedCategory(category)} style={{ backgroundColor: selectedCategory === category ? 'lightblue' : 'white' }}>
-//                 {category}
-//                 <Button size="small" onClick={() => handleRemoveCategoryClick(category)}>X</Button>
-//               </Button>
-//             ))}
-//           </Grid>
-
-//           <Grid item xs={6} md={12} container direction="column">
-//             {selectedCategory && contents[selectedCategory] && contents[selectedCategory].map((content, contentIndex) => (
-//               <Grid item key={contentIndex}>
-//                 <Button>{content}</Button>
-//                 <Button variant="outlined" style={{ marginLeft: '10px' }} size="small" onClick={() => handleRemoveContentClick(content)}>Remove</Button>
-//               </Grid>
-//             ))}
-//           </Grid>
-//       </Grid>
-//     </Box>
-//     </>
-
-//   );
-// }
-
-// export default RegistrationForm;
+import axios from 'axios';
 
 const RegistrationForm = () => {
   const [storeName, setStoreName] = useState('');
   const [storeAddress, setStoreAddress] = useState('');
   const [storeType, setStoreType] = useState('');
   const [selectedTab, setSelectedTab] = useState(0);
-  const [categories, setCategories] = useState(['카테고리 1', '카테고리 2']);
-  const [itemsByCategory, setItemsByCategory] = useState({
-    '카테고리 1': [],
-    '카테고리 2': [],   
-  });
+  const [categories, setCategories] = useState([]);
+  const [newCategoryName, setNewCategoryName] = useState(''); // 사용자 입력을 위한 새 state 추가
+  const [itemsByCategory, setItemsByCategory] = useState({});
+  const [imageFile, setImageFile] = useState('');
+  const [previewImage, setPreviewImage] = useState('');
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
@@ -211,16 +30,48 @@ const RegistrationForm = () => {
     setItemsByCategory({ ...itemsByCategory, [category]: updatedItems });
   };
 
+  const handleAddCategory = () => {
+    if (newCategoryName.trim() === '') return; // 빈 문자열 방지
+    setCategories([...categories, newCategoryName]);
+    setItemsByCategory({ ...itemsByCategory, [newCategoryName]: [] });
+    setNewCategoryName(''); // 카테고리 추가 후 입력 필드 초기화
+  };
 
   const handleDeleteItem = (category, index) => {
     const newItems = itemsByCategory[category].filter((_, i) => i !== index);
     setItemsByCategory({ ...itemsByCategory, [category]: newItems });
   };
 
-  const handleAddCategory = () => {
-    const newCategoryName = `카테고리 ${categories.length + 1}`;
-    setCategories(categories.concat(newCategoryName));
-    setItemsByCategory({ ...itemsByCategory, [newCategoryName]: [] });
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // 선택된 파일에 대한 URL을 생성해 미리보기 이미지로 설정합니다.
+      setPreviewImage(URL.createObjectURL(file));
+      setImageFile(file);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!imageFile) {
+      alert('이미지를 선택해 주세요.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', imageFile);
+
+    try {
+      const response = await axios.post('/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(response.data);
+      alert('이미지가 업로드되었습니다.');
+    } catch (error) {
+      console.error('업로드 중 에러가 발생했습니다', error);
+      alert('이미지 업로드에 실패했습니다.');
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -289,6 +140,17 @@ const RegistrationForm = () => {
           </Grid>
         </Grid>
         <Divider sx={{ my: 2 }} /> {/* 구분선 추가 */}
+        <TextField
+          fullWidth
+          label="새 카테고리 이름"
+          value={newCategoryName}
+          onChange={(e) => setNewCategoryName(e.target.value)}
+          size="small"
+        />
+        {/* 카테고리 추가 버튼 - 이미지 상에서 '+' 탭 대신 사용될 수 있습니다. */}
+        <Button startIcon={<AddCircleIcon />} onClick={handleAddCategory}>
+          카테고리 추가
+        </Button>
         <Tabs value={selectedTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
           {categories.map((category, index) => (
             <Tab key={index} label={category} />
@@ -297,8 +159,8 @@ const RegistrationForm = () => {
         </Tabs>
 
         {selectedCategoryItems.map((item, index) => (
-          <Grid container spacing={2} key={index}>
-            <Grid item xs={12} sm={6}>
+          <Grid container spacing={1} key={index}>
+            <Grid item xs={10} >
               <TextField
                 fullWidth
                 label="음식 이름"
@@ -307,7 +169,8 @@ const RegistrationForm = () => {
                 size="small"
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* "음식 설명" 필드 위치 변경 */}
+            <Grid item xs={10} >
               <TextField
                 fullWidth
                 label="음식 설명"
@@ -316,20 +179,29 @@ const RegistrationForm = () => {
                 size="small"
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="이미지 URL"
-                value={item.image}
-                onChange={(e) => handleItemFieldChange(selectedCategory, index, 'image', e.target.value)}
-                size="small"
+            {/* "이미지 URL" 필드 위치 변경 */}
+            <Grid item xs={10}>
+              <input
+                accept="image/*"
+                type="file"
+                onChange={handleImageChange}
+                id="image-upload"
+                style={{ display: 'none' }}
               />
+              <label htmlFor="image-upload">
+                <Button variant="contained" color="primary" component="span">
+                  이미지 선택
+                </Button>
+              </label>
             </Grid>
-            <Grid item xs={12}>
-              <IconButton onClick={() => handleDeleteItem(selectedCategory, index)}>
-                <DeleteIcon />
-              </IconButton>
-            </Grid>
+            {previewImage && (
+              <Grid item xs={12}>
+                <img src={previewImage} alt="Preview" style={{ maxWidth: '100%' }} />
+              </Grid>
+            )}
+            <Button onClick={handleUpload} variant="contained" color="primary">
+              업로드
+            </Button>
           </Grid>
         ))}
         <Button startIcon={<AddCircleIcon />} onClick={() => handleAddItem(categories[selectedTab])}>
