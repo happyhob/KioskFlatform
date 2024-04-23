@@ -1,8 +1,11 @@
 import React from 'react'
+import UserForm from '../../components/User/UserForm'
 
 const User = () => {
   return (
-    <div>User</div>
+    <div className='container'>
+      <UserForm />
+    </div>
   )
 }
 
