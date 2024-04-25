@@ -23,7 +23,7 @@ const Join = () => {
 
       if( statusCode === 200 ) {
         console.log(`회원가입 성공!`);
-        Swal.alert("회원가입 성공", "메인 화면으로 이동합니다.", "success", () => { navigate("/") })
+        Swal.alert("회원가입 성공", "메인 화면으로 이동합니다.", "success", () => { navigate("/login") })
       }
       else {
         console.log(`회원가입 실패!`);
@@ -31,8 +31,8 @@ const Join = () => {
       }
 
     } catch (error) {
-      console.error(`${error}`)
-      console.error(`회원가입 요청 중 에러가 발생하였습니다.`);
+      //console.error(`${error}`)
+      console.error(`회원가입 요청 중 에러가 발생하였습니다. : ${error}`);
       return
     }
   }
