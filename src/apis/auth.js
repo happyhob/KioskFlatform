@@ -1,8 +1,60 @@
 //BackEnd와 통신을 하는 부분!!
 import api from "./api";
 
+<<<<<<< Updated upstream
 // 회원가입
 export const join = (LoginId, password, UserName, Email) => {return api.post("/join",
+=======
+
+// 로그인
+// export const login = (loginId, password) => api.post(`/login?username=${loginId}&password=${password}`, );
+export const login = (loginId, password) =>{ return  api.post('http://61.81.99.104:8081/login', {
+    "loginId":loginId,
+    "password":password
+})
+    .then(response => {
+        // 응답 상태 코드
+        const statusCode = response.status;
+        console.log('Response Status Code:', statusCode);
+
+        // 서버가 보낸 데이터
+        const responseData=  response.data;
+        console.log('Server Response Data:', responseData);
+
+        // Promise로 응답 상태 코드와 데이터 반환
+        return { statusCode, responseData };
+    })
+    .catch(error => {
+        // 오류가 발생한 경우
+        console.error('Error during login request:', error);
+
+        // Promise로 오류 반환
+        throw error;
+    });
+}
+
+// 사용자 정보
+export const info = () => {return api.get("/users/info")}
+// .then(response => {
+//     const statusCode = response.status;
+
+//     const responseData = response.data;
+
+//     return { statusCode, responseData };
+// })
+// .catch(error => {
+//     // 오류가 발생한 경우
+//     console.error('Error during login request:', error);
+
+//     // Promise로 오류 반환
+//     throw error;
+//   });
+// };
+
+// 회원가입
+
+export const join = (LoginId, password, UserName, Email) => {return api.post("http://61.81.99.104:8081/join",
+>>>>>>> Stashed changes
     {
         "loginId":LoginId,
         "password":password,

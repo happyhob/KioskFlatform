@@ -80,7 +80,11 @@ const LoginContextProvider = ({ children }) => {
 
         // 페이지 이동 ➡ "/" (메인)
         // TODO : 메인 화면으로 꼭 이동할 필요가 있을까?
+<<<<<<< Updated upstream
         Swal.alert("로그인 성공", "메인 화면으로 이동합니다.", "success", () => { navigate("/registration") })}
+=======
+        Swal.alert("로그인 성공", "메인 화면으로 이동합니다.", "success", () => { navigate("/") })}
+>>>>>>> Stashed changes
     } catch (error) {
       console.error(`error : ${error}`)
       // 로그인 실패
