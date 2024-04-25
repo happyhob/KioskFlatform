@@ -91,18 +91,45 @@ const RegistrationForm = () => {
     }
   };
   
+  // const handleFieldChange = (index, field) => (event) => {
+  //   // items 배열 업데이트
+  //   const newItems = [...items];
+  //   const updatedItem = {
+  //     ...newItems[index],
+  //     [field]: event.target.value,
+  //   };
+  //   newItems[index] = updatedItem;
+  //   setItems(newItems);
+    
+  //   // itemsByCategory 업데이트
+  //   const category = newItems[index].category; // 카테고리를 가져옵니다
+  //   if (category) {
+  //     const updatedCategoryItems = itemsByCategory[category].map((item, idx) =>
+  //       idx === index ? updatedItem : item
+  //     );
+  //     setItemsByCategory({ ...itemsByCategory, [category]: updatedCategoryItems });
+  //   }
+  // };
   const handleFieldChange = (index, field) => (event) => {
     // items 배열 업데이트
     const newItems = [...items];
+    let newValue = event.target.value;
+    
+    // price 필드의 경우, 입력값을 정수로 변환
+    if (field === 'price') {
+      newValue = newValue.replace(/[^0-9]/g, '');  // 숫자만 허용
+      newValue = newValue ? parseInt(newValue, 10) : '';
+    }
+    
     const updatedItem = {
       ...newItems[index],
-      [field]: event.target.value,
+      [field]: newValue,
     };
     newItems[index] = updatedItem;
     setItems(newItems);
-    
+  
     // itemsByCategory 업데이트
-    const category = newItems[index].category; // 카테고리를 가져옵니다
+    const category = newItems[index].category;
     if (category) {
       const updatedCategoryItems = itemsByCategory[category].map((item, idx) =>
         idx === index ? updatedItem : item
@@ -110,6 +137,7 @@ const RegistrationForm = () => {
       setItemsByCategory({ ...itemsByCategory, [category]: updatedCategoryItems });
     }
   };
+
 
   const handleRemoveItem = (category, index) => {
     // 해당 카테고리에서 index에 해당하는 아이템을 제거합니다.

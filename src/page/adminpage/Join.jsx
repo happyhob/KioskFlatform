@@ -23,7 +23,7 @@ const Join = () => {
 
       if( statusCode === 200 ) {
         console.log(`회원가입 성공!`);
-        Swal.alert("회원가입 성공", "메인 화면으로 이동합니다.", "success", () => { navigate("/") })
+        Swal.alert("회원가입 성공", "메인 화면으로 이동합니다.", "success", () => { navigate("/login") })
       }
       else {
         console.log(`회원가입 실패!`);

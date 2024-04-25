@@ -1,22 +1,3 @@
-// import React from 'react';
-// import {Layout, List} from '@mui/material';
-// const UserForm = () => {
-
-//   return (
-//     <Layout>
-//           <List
-//             sx={{
-//               display: 'grid',
-//               gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-//               gap: 2,
-//             }}
-//           >
-
-//           </List>
-//         </Layout>
-//   );
-// };
-
 // export default UserForm;
 import React from 'react';
 import PropTypes from 'prop-types';
