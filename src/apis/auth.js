@@ -32,7 +32,8 @@ export const join = (LoginId, password, UserName, Email) => {return api.post("/j
 
 // 로그인
 // export const login = (loginId, password) => api.post(`/login?username=${loginId}&password=${password}`, );
-export const login = async (loginId, password) =>{ try {
+export const login = async (loginId, password) =>{ 
+    try {
     const response = await api.post('/login', {
         "loginId": loginId,
         "password": password
@@ -41,22 +42,21 @@ export const login = async (loginId, password) =>{ try {
     const statusCode = response.status;
     console.log('Response Status Code:', statusCode);
     if(statusCode == 200){localStorage.setItem("test_ID",response.data)}
-    // 서버가 보낸 데이터
-    console.log("asdasd@@@@ {}",response.data);
     const responseData = response.data;
     console.log('Server Response Data:', responseData);
     return { statusCode, responseData };
-} catch (error) {
+    }
+    catch (error) {
     // 오류가 발생한 경우
     console.error('Error during login request:', error);
 
     // Promise로 오류 반환
     throw error;
-}
+    }
 }
 
 // 사용자 정보
- export const info = () => {return api.get("/info")
+export const info = () => {return api.get("/info")
 // .then(response => {
 //     const statusCode = response.status;
 //     const responseData = response.data;

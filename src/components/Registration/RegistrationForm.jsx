@@ -9,10 +9,10 @@ const RegistrationForm = () => {
   const [storeAddress, setStoreAddress] = useState('');
   const [storeType, setStoreType] = useState('');
   const [selectedTab, setSelectedTab] = useState(0);
+  const [kioskId, setKioskId] = useState(0);
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [itemsByCategory, setItemsByCategory] = useState({});
-  const [items, setItems] = useState([]);
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
@@ -21,11 +21,15 @@ const RegistrationForm = () => {
   const handleAddItem = () => {
     const currentCategory = categories[selectedTab];
     const newItem = { name: '', price: '', imageFile: null, previewImage: null, category: currentCategory };
-    setItems([...items, newItem]);
-    
-    // itemsByCategory 업데이트
+
+    // 아이템을 현재 선택된 카테고리에 추가합니다.
     const updatedCategoryItems = [...(itemsByCategory[currentCategory] || []), newItem];
     setItemsByCategory({ ...itemsByCategory, [currentCategory]: updatedCategoryItems });
+  };
+
+  const handleRemoveItem = (category, index) => {
+    const updatedCategoryItems = itemsByCategory[category].filter((_, idx) => idx !== index);
+    setItemsByCategory({ ...itemsByCategory, [category]: updatedCategoryItems });
   };
 
   const handleAddCategory = () => {
@@ -44,115 +48,51 @@ const RegistrationForm = () => {
         return;
     }
 
-    // 새로운 카테고리 배열 생성
     const updatedCategories = [...categories, trimmedName];
-
-    // 새로운 카테고리에 대한 아이템 배열 초기화
-    const updatedItemsByCategory = { 
-        ...itemsByCategory, 
-        [trimmedName]: [] 
-    };
-
-    // 카테고리 상태 업데이트
     setCategories(updatedCategories);
-
-    // 카테고리별 아이템 상태 업데이트
-    setItemsByCategory(updatedItemsByCategory);
-
-    // 입력 필드 초기화
+    setItemsByCategory({ ...itemsByCategory, [trimmedName]: [] });
     setNewCategoryName('');
   };
 
 
-  const handleImageChange = (index) => (event) => {
+  const handleImageChange = (category, index) => (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const newItems = [...items];
-        const updatedItem = {
-          ...newItems[index],
-          imageFile: e.target.result, // Base64 인코딩된 이미지 문자열
-          previewImage: e.target.result // 여기서 이미지 미리보기를 설정합니다.
+        const updatedItems = [...itemsByCategory[category]];
+        updatedItems[index] = {
+          ...updatedItems[index],
+          imageFile: e.target.result,
+          previewImage: e.target.result
         };
-        newItems[index] = updatedItem;
-        setItems(newItems);
-  
-        // 선택한 카테고리가 있다면 itemsByCategory도 업데이트합니다.
-        const category = newItems[index].category;
-        if (category) {
-          const updatedCategoryItems = itemsByCategory[category].map((item, idx) =>
-            idx === index ? updatedItem : item
-          );
-          setItemsByCategory({ ...itemsByCategory, [category]: updatedCategoryItems });
-        }
+        setItemsByCategory({ ...itemsByCategory, [category]: updatedItems });
       };
       reader.readAsDataURL(file);
     }
   };
   
-  // const handleFieldChange = (index, field) => (event) => {
-  //   // items 배열 업데이트
-  //   const newItems = [...items];
-  //   const updatedItem = {
-  //     ...newItems[index],
-  //     [field]: event.target.value,
-  //   };
-  //   newItems[index] = updatedItem;
-  //   setItems(newItems);
-    
-  //   // itemsByCategory 업데이트
-  //   const category = newItems[index].category; // 카테고리를 가져옵니다
-  //   if (category) {
-  //     const updatedCategoryItems = itemsByCategory[category].map((item, idx) =>
-  //       idx === index ? updatedItem : item
-  //     );
-  //     setItemsByCategory({ ...itemsByCategory, [category]: updatedCategoryItems });
-  //   }
-  // };
-  const handleFieldChange = (index, field) => (event) => {
-    // items 배열 업데이트
-    const newItems = [...items];
+  const handleFieldChange = (category, index, field) => (event) => {
+    const updatedItems = [...itemsByCategory[category]];
     let newValue = event.target.value;
-    
-    // price 필드의 경우, 입력값을 정수로 변환
+
     if (field === 'price') {
-      newValue = newValue.replace(/[^0-9]/g, '');  // 숫자만 허용
+      newValue = newValue.replace(/[^0-9]/g, '');
       newValue = newValue ? parseInt(newValue, 10) : '';
     }
-    
-    const updatedItem = {
-      ...newItems[index],
+
+    updatedItems[index] = {
+      ...updatedItems[index],
       [field]: newValue,
     };
-    newItems[index] = updatedItem;
-    setItems(newItems);
-  
-    // itemsByCategory 업데이트
-    const category = newItems[index].category;
-    if (category) {
-      const updatedCategoryItems = itemsByCategory[category].map((item, idx) =>
-        idx === index ? updatedItem : item
-      );
-      setItemsByCategory({ ...itemsByCategory, [category]: updatedCategoryItems });
-    }
-  };
-
-
-  const handleRemoveItem = (category, index) => {
-    // 해당 카테고리에서 index에 해당하는 아이템을 제거합니다.
-    const updatedCategoryItems = itemsByCategory[category].filter((item, idx) => idx !== index);
-    setItemsByCategory({ ...itemsByCategory, [category]: updatedCategoryItems });
-
-    // 전역 아이템 목록에서도 해당 아이템을 제거합니다.
-    const newItems = items.filter((item, idx) => idx !== index);
-    setItems(newItems);
+    setItemsByCategory({ ...itemsByCategory, [category]: updatedItems });
   };
 
   //전송 메서드
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {
+      kioskId: parseInt(kioskId, 10),
       info: {
         name: storeName,
         address: storeAddress,
@@ -165,7 +105,7 @@ const RegistrationForm = () => {
         product: itemsByCategory[category].map(item => ({
           name: item.name,
           price: item.price,
-          image: item.imageFile, // 여기서 이미지 파일은 Base64 인코딩된 문자열로 가정합니다.
+          image: item.imageFile,
         }))
       }))
     };
@@ -228,6 +168,21 @@ const RegistrationForm = () => {
               size="small"
             />
           </Grid>
+          <Grid item xs>
+            <TextField
+              margin="dense"
+              required
+              fullWidth
+              id="kiosk-id"
+              label="키오스크 ID"
+              name="kioskId"
+              autoComplete="kiosk-id"
+              value={kioskId}
+              onChange={(e) => setKioskId(parseInt(e.target.value) || 0)}
+              type="number"
+              size="small"
+            />
+          </Grid>
         </Grid>
         <Divider sx={{ my: 1 }} />
         <TextField
@@ -244,20 +199,19 @@ const RegistrationForm = () => {
           {categories.map((category, index) => (
             <Tab key={index} label={category} />
           ))}
-          <Tab label="+" onClick={handleAddCategory} />
         </Tabs>
-        {items.map((item, index) => (
+        <Divider sx={{ my: 1 }} />
+        {categories.length > 0 && itemsByCategory[categories[selectedTab]].map((item, index) => (
           <Grid container spacing={2} key={index}>
             <Grid item xs={12}>
               <input
                 accept="image/*"
                 type="file"
-                onChange={handleImageChange(index)}
+                onChange={handleImageChange(categories[selectedTab], index)}
                 style={{ display: 'none' }}
                 id={`image-upload-${index}`}
               />
               <label htmlFor={`image-upload-${index}`}>
-              <Divider sx={{ my: 1 }} />
                 <Button variant="contained" component="span">
                   이미지 불러오기
                 </Button>
@@ -269,7 +223,7 @@ const RegistrationForm = () => {
                 fullWidth
                 label="음식 이름"
                 value={item.name}
-                onChange={handleFieldChange(index, 'name')}
+                onChange={handleFieldChange(categories[selectedTab], index, 'name')}
                 size="small"
               />
             </Grid>
@@ -278,14 +232,14 @@ const RegistrationForm = () => {
                 fullWidth
                 label="음식 가격"
                 value={item.price}
-                onChange={handleFieldChange(index, 'price')}
+                onChange={handleFieldChange(categories[selectedTab], index, 'price')}
                 size="small"
               />
             </Grid>
             <Grid item xs={12} md={1}>
-            <IconButton onClick={() => handleRemoveItem(item.category, index)} color="error">
-              <DeleteIcon />
-            </IconButton>
+              <IconButton onClick={() => handleRemoveItem(categories[selectedTab], index)} color="error">
+                <DeleteIcon />
+              </IconButton>
             </Grid>
           </Grid>
         ))}
