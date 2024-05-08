@@ -57,18 +57,20 @@ export const login = async (loginId, password) =>{
 
 // 사용자 정보
 export const info = () => {return api.get("/info")
-// .then(response => {
-//     const statusCode = response.status;
-//     const responseData = response.data;
-//     console.log(statusCode, responseData);
-//     return { statusCode, responseData };
-// })
-// .catch(error => {
-//     // 오류가 발생한 경우
-//     console.error('Error during login request:', error);
-//     // Promise로 오류 반환
-//     throw error;
-//   });
+.then(response => {
+    
+    const statusCode = response.status;
+    const responseData = response.data;
+    console.log("Complete API response:", response);
+    console.log(`Status code: ${statusCode}, Response data:`, responseData);
+    return { statusCode, responseData };
+})
+.catch(error => {
+    // 오류가 발생한 경우
+    console.error('Error during login request:', error);
+    // Promise로 오류 반환
+    throw error;
+  });
 };
 
 //api.post(`/login?username=${loginId}&password=${password}`, )
@@ -92,20 +94,46 @@ export const pw = (userName,userId ,email)=> {return api.get('/users/pw',
     })
 };
 
-export const delFloor = (buildingId, floorNum) => {console.log("매개변수:",buildingId,floorNum);
-    const url = `/file/${buildingId}/${floorNum}`;
-    return api.delete(url)
+export const ProductsByUserId = () => {return api.post("/user",
+    {
+        "loginId" : 2222,
+    })
+    .then(response => {
+            // 응답으로 받은 데이터를 반환
+            console.log(response.data);
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error fetching products:', error);
+            throw error;
+        });
+
 };
 
 
-export const delBuild = (buildingId) => {console.log("매개변수:",buildingId);
-    const url = `/file/${buildingId}`;
-    console.log(url);
-    return api.delete(url)
-};
+//region ProductsByUserId 요청 코드
+
+// export const ProductsByUserId = (userId) => {return api.post(`/user=${userId}`)
+
+//     .then(response => {
+//             // 응답으로 받은 데이터를 반환
+//             return response.data;
+//         })
+//         .catch(error => {
+//             console.error('Error fetching products:', error);
+//             throw error;
+//         });
+
+// };
+
+//endregion
+
 
 
 // 회원정보 수정
+
+
+
 export const update = (data) => api.put("/users", data)
 
 

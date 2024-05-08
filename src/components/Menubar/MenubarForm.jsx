@@ -7,12 +7,14 @@ import { alert } from "../../apis/alter"; // 수정된 import
 import { useNavigate } from "react-router-dom";
 
 const MenubarForm = () => {
-    const { isLogin } = useContext(LoginContext); 
+    const { isLogin, userInfo } = useContext(LoginContext); 
     const navigate = useNavigate();
+
 
     // Redirects to the registration page if logged in, otherwise prompts login
     const handleRegistration = () => {
         if (!isLogin) {
+
             alert("로그인이 필요합니다", "로그인 화면으로 이동합니다.", "warning", () => {
                 navigate("/login");
             });
@@ -26,7 +28,7 @@ const MenubarForm = () => {
             <SimpleTreeView disableSelection>
                 {isLogin ? (
                     <>
-                        <dir>__님 안녕하세요</dir>
+                        <dir>{userInfo.userName}님 안녕하세요</dir>
                         <TreeItem onClick={handleRegistration} itemId="grid" label="상품 등록" children={{ fontSize: '100rem' }} style={{ fontSize: '1000px' }}>
                             <TreeItem itemId="grid-community" label="메뉴1" />
                             <TreeItem itemId="grid-pro" label="메뉴2" />

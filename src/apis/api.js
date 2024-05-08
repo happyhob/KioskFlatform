@@ -7,15 +7,4 @@ const api = axios.create({
   withCredentials: true // 모든 요청에 withCredentials를 적용합니다.
 });
 
-// 로그아웃 함수
-export const logout = () => {
-  return api.put("/logout")
-    .then(response => {
-      // 로그아웃 성공 시의 처리
-    })
-    .catch(error => {
-      // 에러 처리
-    });
-};
-
 export default api;

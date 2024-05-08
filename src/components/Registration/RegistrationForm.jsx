@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext,useState } from 'react';
 import { Box, Grid, TextField, Button, Tabs, Tab, Divider, IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete'; // 삭제 아이콘을 불러옵니다.
+import { LoginContext } from '../../Context/LoginContextProvider';
 import axios from 'axios';
 
 const RegistrationForm = () => {
@@ -91,7 +92,16 @@ const RegistrationForm = () => {
   //전송 메서드
   const handleSubmit = async (event) => {
     event.preventDefault();
+    for (const category of categories) {
+      for (const item of itemsByCategory[category]) {
+        if (!item.name || !item.price || !item.imageFile) {
+          alert('추가하시려는 메뉴의 이름, 가격, 이미지를 입력해주세요.');
+          return;
+        }
+      }
+    }
     const data = {
+      //추가적으로 userId 보내주기
       kioskId: parseInt(kioskId, 10),
       info: {
         name: storeName,

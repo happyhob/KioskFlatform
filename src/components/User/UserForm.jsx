@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { AppBar, Button, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Typography, Drawer, List, ListItem, ListItemText, Badge, Divider } from '@material-ui/core';
+import { AppBar, Button, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Typography, Drawer, List, ListItem, ListItemSecondaryAction, ListItemText, Badge, Divider } from '@material-ui/core';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import './UserForm.css';
 
 const UserForm = () => {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
-  const [cards, setCards] = useState([
+  const [cards, {/*setCards*/}] = useState([
     { id: 1, title: '한식', description: '메뉴 설명', price: '10,000원', editable: false },
     { id: 2, title: '중식', description: '메뉴 설명', price: '11,000원', editable: false },
     { id: 3, title: '일식', description: '메뉴 설명', price: '12,000원', editable: false },
@@ -30,12 +32,19 @@ const UserForm = () => {
     alert('Proceeding to checkout...');
   };
 
+  const removeFromCart = (index) => {
+    setCart(currentCart => currentCart.filter((item, i) => i !== index));
+  };
+
   return (
     <React.Fragment>
       <CssBaseline />
       <AppBar position="static" className="appBar">
         <Typography variant="h6" color="inherit" align="center">
           사용자 페이지
+        </Typography>
+        <Typography variant="h6" color="initial" align="center" onClick={() => ""}>
+          AI 도우미(음성안내)
         </Typography>
       </AppBar>
       <main>
@@ -81,6 +90,11 @@ const UserForm = () => {
           {cart.map((item, index) => (
             <ListItem key={index}>
               <ListItemText primary={item.title} secondary={`Price: ${item.price}`} />
+              <ListItemSecondaryAction>
+                <IconButton edge="end" onClick={() => removeFromCart(index)} aria-label="delete">
+                  <DeleteIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
             </ListItem>
           ))}
           <Divider />
@@ -100,108 +114,82 @@ const UserForm = () => {
 
 export default UserForm;
 
+//region UserForm(API) 요청 코드
+// import React, { useState, useEffect } from 'react';
+// import { AppBar, Button, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Typography, Drawer, List, ListItem, ListItemSecondaryAction, ListItemText, Badge, Divider } from '@material-ui/core';
+// import IconButton from '@mui/material/IconButton';
+// import DeleteIcon from '@mui/icons-material/Delete';
+// import './UserForm.css';
+// import { ProductsByUserId } from '../../apis/auth.js';
 
-
-// import React, { useEffect, useState } from 'react';
-// import PropTypes from 'prop-types';
-// import classNames from 'classnames';
-// import AppBar from '@material-ui/core/AppBar';
-// import Card from '@material-ui/core/Card';
-// import CardActions from '@material-ui/core/CardActions';
-// import CardContent from '@material-ui/core/CardContent';
-// import CardMedia from '@material-ui/core/CardMedia';
-// import CssBaseline from '@material-ui/core/CssBaseline';
-// import Grid from '@material-ui/core/Grid';
-// import Typography from '@material-ui/core/Typography';
-// import Button from '@material-ui/core/Button';
-// import { withStyles } from '@material-ui/core/styles';
-
-// // 스타일 설정 업데이트
-// const styles = theme => ({
-//   appBar: {
-//     position: 'relative',
-//   },
-//   layout: {
-//     width: 'auto',
-//     marginLeft: theme.spacing(3),
-//     marginRight: theme.spacing(3),
-//     [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
-//       width: 1100,
-//       marginLeft: 'auto',
-//       marginRight: 'auto',
-//     },
-//   },
-//   cardGrid: {
-//     padding: theme.spacing(8, 0),
-//   },
-//   card: {
-//     height: '100%',
-//     display: 'flex',
-//     flexDirection: 'column',
-//   },
-//   cardMedia: {
-//     paddingTop: '56.25%', // 16:9 비율
-//   },
-//   cardContent: {
-//     flexGrow: 1,
-//   },
-//   footer: {
-//     backgroundColor: theme.palette.background.paper,
-//     padding: theme.spacing(6),
-//   },
-// });
-
-// function Album(props) {
-//   const { classes } = props;
-//   const [menuItems, setMenuItems] = useState([]); // 메뉴 데이터 상태 관리
+// const UserForm = () => {
+//   const [cart, setCart] = useState([]);
+//   const [cartOpen, setCartOpen] = useState(false);
+//   const [cards, setCards] = useState([]);
 
 //   useEffect(() => {
-//     fetchMenuData(); // 컴포넌트 마운트 시 메뉴 데이터 가져오기
+//     const userId = 2222; // 예시로 사용할 사용자 ID
+//     ProductsByUserId(userId)
+//       .then(data => {
+//         setCards(data.map(item => ({
+//           id: item.product_id, // API 응답에 따라 필드명을 확인하고 수정해야 할 수 있습니다.
+//           title: item.product_name,
+//           description: item.categoryName,
+//           price: `${item.price}원`,
+//           image: item.image,
+//           editable: false
+//         })));
+//       })
+//       console
+//       .catch(error => console.error('Error loading products:', error));
 //   }, []);
 
-//   // 메뉴 데이터를 API에서 가져오는 함수
-//   const fetchMenuData = async () => {
-//     try {
-//       const response = await fetch('API_ENDPOINT');
-//       const data = await response.json();
-//       setMenuItems(data.menuItems); // API 응답에서 메뉴 데이터 설정
-//     } catch (error) {
-//       console.error('Fetching menu data failed', error);
-//     }
+//   const handleCartToggle = () => {
+//     setCartOpen(!cartOpen);
+//   };
+
+//   const addToCart = (card) => {
+//     setCart([...cart, card]);
+//   };
+
+//   const handleCheckout = () => {
+//     console.log('Proceeding to checkout');
+//     alert('Proceeding to checkout...');
+//   };
+
+//   const removeFromCart = (index) => {
+//     setCart(currentCart => currentCart.filter((item, i) => i !== index));
 //   };
 
 //   return (
 //     <React.Fragment>
 //       <CssBaseline />
-//       <AppBar position="static" className={classes.appBar}>
-//         {/* AppBar 내용 생략 */}
+//       <AppBar position="static" className="appBar">
+//         <Typography variant="h6" color="inherit" align="center">
+//           사용자 페이지
+//         </Typography>
 //       </AppBar>
 //       <main>
-//         <div className={classNames(classes.layout, classes.cardGrid)}>
-//           {/* 그리드 컨테이너 시작 */}
+//         <div className="layout cardGrid">
 //           <Grid container spacing={2}>
-//             {menuItems.map((item, index) => (
-//               <Grid item key={index} sm={6} md={4} lg={3}>
-//                 <Card className={classes.card}>
-//                   <CardMedia
-//                     className={classes.cardMedia}
-//                     image={item.imageUrl} // 이미지 URL
-//                     title={item.name} // 이미지 제목
-//                   />
-//                   <CardContent className={classes.cardContent}>
+//             {cards.map(card => (
+//               <Grid item key={card.id} sm={6} md={4} lg={3}>
+//                 <Card className="card">
+//                   <CardMedia className="cardMedia" image={card.image} title={card.title} />
+//                   <CardContent>
 //                     <Typography gutterBottom variant="h5" component="h2">
-//                       {item.name} // 메뉴 이름
+//                       {card.title}
 //                     </Typography>
 //                     <Typography>
-//                       ₩{item.price} // 가격
+//                       {card.description}
+//                     </Typography>
+//                     <Typography color="textSecondary">
+//                       가격: {card.price}
 //                     </Typography>
 //                   </CardContent>
 //                   <CardActions>
-//                     <Button size="small" color="primary">
-//                       View
-//                     </Button>
-//                     <Button size="small" color="primary">
-//                       Edit
+//                     <Button size="small" color="primary" onClick={() => addToCart(card)}>
+//                       Add to Cart
 //                     </Button>
 //                   </CardActions>
 //                 </Card>
@@ -209,16 +197,43 @@ export default UserForm;
 //             ))}
 //           </Grid>
 //         </div>
+//         <Button variant="contained" color="secondary" onClick={handleCartToggle} style={{ position: 'fixed', bottom: 20, right: 20 }}>
+//           <Badge badgeContent={cart.length} color="error">
+//             Cart
+//           </Badge>
+//         </Button>
 //       </main>
-//       <footer className={classes.footer}>
-//         {/* 푸터 내용 생략 */}
+//       <Drawer anchor="right" open={cartOpen} onClose={handleCartToggle}>
+//         <List style={{ width: '250px' }}>
+//           <ListItem>
+//             <ListItemText primary="Shopping Cart" />
+//           </ListItem>
+//           <Divider />
+//           {cart.map((item, index) => (
+//             <ListItem key={index}>
+//               <ListItemText primary={item.title} secondary={`Price: ${item.price}`} />
+//               <ListItemSecondaryAction>
+//                 <IconButton edge="end" onClick={() => removeFromCart(index)} aria-label="delete">
+//                   <DeleteIcon />
+//                 </IconButton>
+//               </ListItemSecondaryAction>
+//             </ListItem>
+//           ))}
+//           <Divider />
+//           <ListItem>
+//             <Button color="primary" variant="contained" fullWidth onClick={handleCheckout}>
+//               Pay
+//             </Button>
+//           </ListItem>
+//         </List>
+//       </Drawer>
+//       <footer className="footer">
+//         {/* Footer content */}
 //       </footer>
 //     </React.Fragment>
 //   );
 // }
 
-// Album.propTypes = {
-//   classes: PropTypes.object.isRequired,
-// };
+// export default UserForm;
 
-// export default withStyles(styles)(Album);
+//endregion
