@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const api = axios.create({
   // baseURL: 'http://localhost:8081',
-  baseURL: 'http://61.81.99.104:8081', // 여기에 서버의 기본 URL을 넣으세요.
+  baseURL: 'http://61.81.99.104:8081',
   withCredentials: true // 모든 요청에 withCredentials를 적용합니다.
 });
 

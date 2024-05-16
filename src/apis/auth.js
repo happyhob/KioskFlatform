@@ -94,6 +94,8 @@ export const pw = (userName,userId ,email)=> {return api.get('/users/pw',
     })
 };
 
+export const AI = () => {return api.post('/users/ai')}
+
 export const ProductsByUserId = () => {return api.post("/user",
     {
         "loginId" : 2222,

@@ -33,7 +33,6 @@ const LoginForm = () => {
   useEffect( () => {
     // 쿠키에서 저장된 아이디 가져오기
     const remeberId = Cookies.get("user_login")
-    console.log(`쿠키 remeberId : ${remeberId}`);
     setRememberUserId(remeberId)
   }, [])
 

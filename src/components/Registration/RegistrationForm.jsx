@@ -2,7 +2,6 @@ import React, { useContext,useState } from 'react';
 import { Box, Grid, TextField, Button, Tabs, Tab, Divider, IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete'; // 삭제 아이콘을 불러옵니다.
-import { LoginContext } from '../../Context/LoginContextProvider';
 import axios from 'axios';
 
 const RegistrationForm = () => {

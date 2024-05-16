@@ -27,10 +27,7 @@ function PwForm() {
             console.log(`data : ${response.data}`);
             console.log(`status : ${response.status}`);
 
-
             Swal.alert("비밀번호 찾기 성공", "Password:"+response.data , "success", () => { navigate("/") })
-
-
         }catch(err){
             console.log(err);
         }

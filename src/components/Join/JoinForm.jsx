@@ -35,7 +35,7 @@ const JoinForm = ({ join }) => {
             />
               <FaUser className='icon'/>
           </div>
-          <div className="input-box">
+          <div className="input-box" >
             <input
                 id="password"
                 type="password"
