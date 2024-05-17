@@ -1,3 +1,4 @@
+//region
 // //header Menu bar
 
 // import React,{useState, useEffect} from 'react'
@@ -65,6 +66,7 @@
 //   )
 // }
 // export default Home;
+//endregion
 
 import React, { useContext, useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
@@ -98,6 +100,10 @@ const Home = () => {
       navigate("/");
     }
   };
+  const navigateToQR= () => {
+    navigate("/QR");
+  };
+  
 
   const handleLogout = () => {
     logout();  // 로그아웃 함수 호출
@@ -127,7 +133,10 @@ const Home = () => {
               <Button color="inherit" onClick={navigateToJoin}>Sign up</Button>
             </>
           ) : (
+            <>
+            <Button color="inherit" onClick={navigateToQR}>QR</Button>
             <Button color="inherit" onClick={handleLogout}>Logout</Button>
+            </>
           )}
         </Toolbar>
       </AppBar>

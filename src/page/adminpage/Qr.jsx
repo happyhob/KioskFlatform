@@ -1,9 +1,18 @@
 import React from 'react'
+// import Header from '../components/Header/Header'
+import QRForm from '../../components/QR/QRForm'
+import Home from '../adminpage/Home';
 
-const Qr = () => {
+
+const QR = () => {
   return (
-    <div>Qr</div>
+    <>
+        <Home/>
+        <div className='container'>
+            <QRForm/>
+        </div>
+    </>
   )
 }
 
-export default Qr
+export default QR

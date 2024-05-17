@@ -1,30 +1,32 @@
 //header Menu bar
-import React,{useState, useEffect} from 'react'
+import React,{useContext, useState, useEffect} from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import LoginForm from '../../components/Login/LoginForm';
 import { useNavigate } from 'react-router-dom';
-import MenubarForm from '../../components/Menubar/MenubarForm';
 import RegistrationForm from '../../components/Registration/RegistrationForm';
+import { LoginContext } from '../../Context/LoginContextProvider'; 
+import Home from '../adminpage/Home';
 //https://mui.com/material-ui/react-app-bar/
 const Registration=()=>{
 
   const navigate = useNavigate();
-
+  const { isLogin, logout } = useContext(LoginContext);
   const [showMenu, setShowMenu] =useState(true);
 
-  const navigateToQR= () => {
-    navigate("/Qr_export");
+  const navigateToLogin = () => {
+    navigate("/login");
   };
-  
-  const navigateToLogout= () =>{
-    navigate("/")
-  }
+  const navigateToJoin = () => {
+    navigate("/join");
+  };
+
+  const navigateToQR= () => {
+    navigate("/QR");
+  };
 
   const navigateToRegistration = () => {
     navigate("/registration");
@@ -39,7 +41,14 @@ const Registration=()=>{
       navigate("/registraion");
     }
   };
+  const navigateToHome = () => {
+    navigate("/");
+  };
 
+  const handleLogout = () => {
+    logout();  // 로그아웃 함수 호출
+    navigateToHome();
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -59,11 +68,17 @@ const Registration=()=>{
           onClick={navigateToRegistration}>
             Oner import image
           </Button>
-          <Button color="inherit"
-          onClick={navigateToQR}>QR</Button>
-          <Button color="inherit"
-          onClick={navigateToLogout}>Logout</Button>
-          
+          {!isLogin ? (
+            <>
+              <Button color="inherit" onClick={navigateToLogin}>Login</Button>
+              <Button color="inherit" onClick={navigateToJoin}>Sign up</Button>
+            </>
+          ) : (
+            <>
+            <Button color="inherit" onClick={navigateToQR}>QR</Button>
+            <Button color="inherit" onClick={handleLogout}>Logout</Button>
+            </>
+          )}
         </Toolbar>
         <RegistrationForm/>
       </AppBar>
