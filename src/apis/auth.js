@@ -96,7 +96,7 @@ export const pw = (userName,userId ,email)=> {return api.get('/users/pw',
 
 export const AI = () => {return api.post('/users/ai')}
 
-export const ProductsByUserId = () => {return api.post("/user",
+export const ProductsByUserId = () => {return api.post("/user/kioskpage",
     {
         "loginId" : 2222,
     })
@@ -112,6 +112,17 @@ export const ProductsByUserId = () => {return api.post("/user",
 
 };
 
+export const saveQrCode = (qrCodeData) => {
+    return api.post("/save-qrcode", { qrCodeData })
+      .then(response => {
+        console.log('QR Code saved:', response.data);
+        return response.data;
+      })
+      .catch(error => {
+        console.error('Error saving QR code:', error);
+        throw error;
+      });
+  };
 
 //region ProductsByUserId 요청 코드
 

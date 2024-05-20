@@ -75,8 +75,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import XIcon from '@mui/icons-material/X';
+import InstagramIcon from '@mui/icons-material/Instagram';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../Context/LoginContextProvider';  // 로그인 컨텍스트 가져오기
+import { Twitter } from '@mui/icons-material';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -124,6 +128,9 @@ const Home = () => {
           >
             <MenuIcon />
           </IconButton>
+          <FacebookIcon />
+          <InstagramIcon />
+          <XIcon />
           <Button variant="h6" component="div" sx={{ flexGrow: 1 }} onClick={navigateToHome}>
             Easy Make Kiosk
           </Button>

@@ -1,8 +1,9 @@
-import React, { useContext,useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Grid, TextField, Button, Tabs, Tab, Divider, IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete'; // 삭제 아이콘을 불러옵니다.
 import axios from 'axios';
+import './RegistrationForm.css';
 
 const RegistrationForm = () => {
   const [storeName, setStoreName] = useState('');
@@ -132,7 +133,7 @@ const RegistrationForm = () => {
   };
 
   return (
-    <Box sx={{ mt: 1, width: '100%' }}>
+    <Box sx={{ mt: 1, width: '100%'}}>
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs>
