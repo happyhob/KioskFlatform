@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import Home from '../adminpage/Home';
+import Header from '../../components/Header/Header'
 import JoinForm from '../../components/Join/JoinForm'
 import * as auth from '../../apis/auth';
 import * as Swal from '../../apis/alter';
@@ -40,7 +40,7 @@ const Join = () => {
 
   return (
       <>
-        <Home />
+        <Header />
         <div className='container'>
           <JoinForm join={join} />
         </div>

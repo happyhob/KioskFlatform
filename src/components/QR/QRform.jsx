@@ -4,12 +4,12 @@ import { Button, Divider } from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { saveQrCode } from '../../apis/auth.js';
 
-function QRForm() {
+function QrForm() {
   const [qrCodeData, setQrCodeData] = useState('');
   const [savedUrl, setSavedUrl] = useState('');
 
   const handleGenerateQr = () => {
-    const url = "http://61.81.99.105:3000/user";
+    const url = "http://192.168.55.73:3000/user";
     setQrCodeData(url);
   };
 
@@ -53,4 +53,4 @@ function QRForm() {
   );
 }
 
-export default QRForm;
+export default QrForm;
