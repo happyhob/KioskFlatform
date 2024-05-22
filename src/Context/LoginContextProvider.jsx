@@ -28,7 +28,7 @@ const LoginContextProvider = ({ children }) => {
     let data
 
     if(isAuthPage ) {
-      navigate("/")
+      navigate("/home")
     }
     try {
       response = await auth.info()
@@ -48,15 +48,15 @@ const LoginContextProvider = ({ children }) => {
       // 인증이 안되어 있는 경우,
       // 로그인 페이지로 이동 OR refresh token 고려
       // 로그인이 필요한 페이지인 경우, 로그인 페이지로 이동
-      // navigate("/")
+      navigate("/home")
       console.error(`세션이 만료되었거나 인증에 실패하였습니다.`);
       return
     }
-  //   if (response.responseData) {
-  //   loginSetting(response.responseData);  // Passing the whole responseData object
-  // } else {
-  //   console.error("No login data available");
-  // }
+    if (response.responseData) {
+    loginSetting(response.responseData);  // Passing the whole responseData object
+  } else {
+    console.error("No login data available");
+  }
     // ✅ 인증 성공
     // 정보 세팅
     loginSetting(data)
@@ -86,7 +86,7 @@ const LoginContextProvider = ({ children }) => {
 
         // 페이지 이동 ➡ "/" (메인)
         // TODO : 메인 화면으로 꼭 이동할 필요가 있을까?
-        Swal.alert("로그인 성공", "메인 화면으로 이동합니다.", "success", () => { navigate("/") })}
+        Swal.alert("로그인 성공", "메인 화면으로 이동합니다.", "success", () => { navigate("/home") })}
     } 
     catch (error) 
     {
@@ -107,7 +107,7 @@ const LoginContextProvider = ({ children }) => {
       // 로그아웃 세팅
       logoutSetting()
       // 페이지 이동 ➡ "/" (메인)
-      navigate("/")
+      navigate("/home")
       return
     }
 
@@ -117,7 +117,7 @@ const LoginContextProvider = ({ children }) => {
           logoutSetting()
 
           // 페이지 이동 ➡ "/" (메인)
-          navigate("/")
+          navigate("/home")
         }})
   }
 

@@ -17,7 +17,7 @@ const CartForm = ({ cart, open, handleClose }) => {
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" style={{ flexGrow: 1 }}>
-              Your Cart
+              장바구니
             </Typography>
             <IconButton edge="end" color="inherit" onClick={handleClose}>
               {/* <CloseIcon /> Uncomment and import CloseIcon if it's installed */}
@@ -38,7 +38,7 @@ const CartForm = ({ cart, open, handleClose }) => {
           </ListItem>
         </List>
         <Button variant="contained" color="primary" fullWidth onClick={handleClose}>
-          Checkout
+          결제
         </Button>
       </div>
     </Modal>

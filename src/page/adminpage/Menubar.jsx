@@ -6,10 +6,10 @@ import MenubarForm from '../../components/Menubar/MenubarForm'
 const MenuBar = () => {
   return (
     <>
-        <Header/>
-        <div className='container'>
-            <MenubarForm />
-        </div>
+      <Header/>
+      <div className='container'>
+        <MenubarForm />
+      </div>
     </>
   )
 }

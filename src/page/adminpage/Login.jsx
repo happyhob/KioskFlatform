@@ -4,8 +4,8 @@ import LoginForm from '../../components/Login/LoginForm'
 const Login = () => {
   return (
     <>
-        <Header/>
-        <LoginForm /> 
+      <Header />
+      <LoginForm /> 
     </>
   )
 }

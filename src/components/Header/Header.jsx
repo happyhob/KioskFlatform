@@ -4,8 +4,8 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import FacebookIcon from '@mui/icons-material/Facebook';
-import XIcon from '@mui/icons-material/X';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../Context/LoginContextProvider';
@@ -22,14 +22,14 @@ const Header = () => {
     navigate("/join");
   };
   const navigateToHome = () => {
-    navigate("/");
+    navigate("/home");
   };
   const navigateToMenuForm = () => {
     if (showMenu) {
       setShowMenu(false);
       navigate("/menu");
     } else {
-      navigate("/");
+      navigate("/home");
     }
   };
 
@@ -58,6 +58,7 @@ const Header = () => {
       >
         <MenuIcon />
       </IconButton>
+
       <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
         <IconButton color="inherit" aria-label="facebook" href="https://facebook.com">
           <FacebookIcon />
@@ -65,35 +66,35 @@ const Header = () => {
         <IconButton color="inherit" aria-label="instagram" href="https://instagram.com">
           <InstagramIcon />
         </IconButton>
-      </Box>
-      <Box sx={{ flexGrow: 3, display: 'flex', justifyContent: 'center' }}>
-        <Button
-          variant="h6"
-          component="div"
-          sm={{ flexGrow: 1, color: 'white' }}
-          onClick={navigateToHome}
-        >
-          Home
-        </Button>
-        <Button
-          variant="h6"
-          component="div"
-          sm={{ flexGrow: 1, color: 'white' }}
-          onClick={navigateToRegistration}
-        >
-          Registration
-        </Button>
-        <Button
-          variant="h6"
-          component="div"
-          sm={{ flexGrow: 1, color: 'white' }}
-          onClick={navigateToHome}
-        >
-          Profile
-        </Button>
+        <IconButton color="inherit" aria-label="instagram" href="https://youtube.com">
+          <YouTubeIcon />
+        </IconButton>
       </Box>
       {!isLogin ? (
         <>
+          <Box sx={{ flexGrow: 3, display: 'flex', justifyContent: 'center' }}>
+            <Button
+              variant="h6"
+              component="div"
+              sm={{ flexGrow: 1 }}
+            >
+              Home
+            </Button>
+            <Button
+              variant="h6"
+              component="div"
+              sm={{ flexGrow: 1, color: 'gray' }}
+            >
+              Registration
+            </Button>
+            <Button
+              variant="h6"
+              component="div"
+              sm={{ flexGrow: 1, color: 'gray' }}
+            >
+              Profile
+            </Button>
+          </Box>
           <Button color="inherit" onClick={navigateToLogin} sx={{ color: 'white' }}>
             Login
           </Button>
@@ -103,6 +104,32 @@ const Header = () => {
         </>
       ) : (
         <>
+          <Box sx={{ flexGrow: 3, display: 'flex', justifyContent: 'center' }}>
+            <Button
+              variant="h6"
+              component="div"
+              sm={{ flexGrow: 1, color: 'white' }}
+              onClick={navigateToHome}
+            >
+              Home
+            </Button>
+            <Button
+              variant="h6"
+              component="div"
+              sm={{ flexGrow: 1, color: 'white' }}
+              onClick={navigateToRegistration}
+            >
+              Registration
+            </Button>
+            <Button
+              variant="h6"
+              component="div"
+              sm={{ flexGrow: 1, color: 'white' }}
+              onClick={navigateToHome}
+            >
+              Profile
+            </Button>
+          </Box>
           <Button color="inherit" onClick={navigateToQR} sx={{ color: 'white' }}>
             QR
           </Button>

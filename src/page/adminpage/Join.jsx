@@ -13,25 +13,24 @@ const Join = () => {
 
   // 회원가입 요청
   const join = async (  userId, userPw, name, email ) => {
-    console.log( userId, userPw, name, email);
+    //console.log( userId, userPw, name, email);
 
     try {
       const {statusCode, responseData} = await auth.join( userId, userPw, name, email)
 
-      console.log(`data : ${responseData}`);
-      console.log(`status : ${statusCode}`);
+      // console.log(`data : ${responseData}`);
+      // console.log(`status : ${statusCode}`);
 
       if( statusCode === 200 ) {
-        console.log(`회원가입 성공!`);
+        //console.log(`회원가입 성공!`);
         Swal.alert("회원가입 성공", "메인 화면으로 이동합니다.", "success", () => { navigate("/login") })
       }
       else {
-        console.log(`회원가입 실패!`);
+        //console.log(`회원가입 실패!`);
         Swal.alert("회원가입 실패", "회원가입에 실패하였습니다.", "error" )
       }
-
+      
     } catch (error) {
-      //console.error(`${error}`)
       console.error(`회원가입 요청 중 에러가 발생하였습니다. : ${error}`);
       return
     }

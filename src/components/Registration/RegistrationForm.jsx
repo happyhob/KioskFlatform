@@ -121,7 +121,7 @@ const RegistrationForm = () => {
     };
     console.log('Sending data to server:', data);
     try {
-      const response = await axios.post('/insert-menu', data, {
+      const response = await axios.post('/admin/insert-menu', data, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -136,6 +136,7 @@ const RegistrationForm = () => {
     <Box sx={{ mt: 1, width: '100%'}}>
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2} alignItems="center">
+          <Box>
           <Grid item xs>
             <TextField
               margin="dense"
@@ -193,6 +194,7 @@ const RegistrationForm = () => {
               size="small"
             />
           </Grid>
+          </Box>
         </Grid>
         <Divider sx={{ my: 1 }} />
         <TextField
@@ -228,7 +230,7 @@ const RegistrationForm = () => {
               </label>
               {item.previewImage && <img src={item.previewImage} alt="Preview" style={{ maxWidth: '100%', display: 'block', marginTop: '10px' }} />}
             </Grid>
-            <Grid item xs={12} md={2}>
+            <Grid item xs={12} md={2} pb={1}>
               <TextField
                 fullWidth
                 label="음식 이름"
@@ -237,6 +239,7 @@ const RegistrationForm = () => {
                 size="small"
               />
             </Grid>
+            <Grid></Grid>
             <Grid item xs={12} md={2}>
               <TextField
                 fullWidth

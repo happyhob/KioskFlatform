@@ -1,6 +1,7 @@
 import React from "react";
 import {Box, Typography} from "@mui/material";
 import marketImage from '../../market.png';
+
 const HomeForm =() => {
     return(
         <Box>
@@ -14,6 +15,7 @@ const HomeForm =() => {
                 backgroundImage: `url(${marketImage})`,
                 backgroundRepeat: "no-repeat",
                 backgroundColor:"black",
+                backgroundAttachment: "fixed",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
                 height: 600,
