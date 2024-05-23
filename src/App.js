@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './page/adminpage/Home';
 import Join from './page/adminpage/Join';
 import Login from './page/adminpage/Login';
@@ -39,6 +39,7 @@ function App() {
       <LoginContextProvider value={{ isLoggedIn, setLoggedIn }}>
         <Header />
         <Routes>
+          <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />

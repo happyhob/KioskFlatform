@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import Header from '../../components/Header/Header'
+import Header from '../../components/AdminHeader/Header'
 import JoinForm from '../../components/Join/JoinForm'
 import * as auth from '../../apis/auth';
 import * as Swal from '../../apis/alter';
@@ -36,13 +36,10 @@ const Join = () => {
     }
   }
 
-
   return (
       <>
         <Header />
-        <div className='container'>
-          <JoinForm join={join} />
-        </div>
+        <JoinForm join={join} />
       </>
   )
 }

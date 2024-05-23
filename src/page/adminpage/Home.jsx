@@ -2,7 +2,7 @@ import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import HomeForm from '../../components/Home/HomeForm'
-import Header from '../../components/Header/Header'
+import Header from '../../components/AdminHeader/Header'
 import Footer from '../../components/Footer/Footer'
 const Home = () => {
  

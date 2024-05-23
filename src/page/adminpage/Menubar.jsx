@@ -1,15 +1,12 @@
 import React from 'react'
-import Header from '../../components/Header/Header'
+import Header from '../../components/AdminHeader/Header'
 import MenubarForm from '../../components/Menubar/MenubarForm'
-
 
 const MenuBar = () => {
   return (
     <>
       <Header/>
-      <div className='container'>
-        <MenubarForm />
-      </div>
+      <MenubarForm />
     </>
   )
 }
