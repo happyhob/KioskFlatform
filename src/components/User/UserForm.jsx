@@ -7,6 +7,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import './UserForm.css';
 import { ProductsByUserId } from '../../apis/auth.js';
 import ChatModal from '../AIModal/ChatModal.js'; // 모달 컴포넌트 import
+import kakaoImage from '../../image/kakao.png';
+import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -31,6 +33,9 @@ const UserForm = () => {
   const [cards, setCards] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+
+   const [readyResponse, setReadyResponse] = useState(null);
+   const [error, setError] = useState(null);
 
   useEffect(() => {
     const userId = 3333; // 예시로 사용할 사용자 ID
@@ -76,9 +81,19 @@ const UserForm = () => {
     updateTotalPrice(newCart);
   };
 
-  const handleCheckout = () => {
-    console.log('Proceeding to checkout');
-    alert(`Proceeding to checkout... 총합: ${totalPrice}원`);
+  const handleReadyToKakaoPay = async () => {
+    try {
+      const response = await axios.post('http://172.20.10.4:8080/payment/ready',{
+        "item_name" :"hobinlee",
+        "quantity":"1", // 주문 수량은 정수로 전달
+        "total_amount":"100000" // 총 금액
+      });
+      setReadyResponse(response.data);
+      // 리디렉션 URL 설정 (response.data.next_redirect_pc_url 또는 다른 URL 필드)
+      window.location.href = response.data.next_redirect_pc_url;
+    } catch (error) {
+      setError(error.response ? error.response.data : 'Error occurred');
+    }
   };
 
   const updateTotalPrice = (currentCart) => {
@@ -185,12 +200,12 @@ const UserForm = () => {
       <Drawer anchor="right" open={cartOpen} onClose={handleCartToggle}>
         <List style={{ width: '300px' }}>
           <ListItem>
-            <ListItemText primary="Shopping Cart" />
+            <ListItemText primary="장바구니" />
           </ListItem>
           <Divider />
           {cart.map((item, index) => (
             <ListItem key={index}>
-              <ListItemText primary={item.title} secondary={`Price: ${item.price}`} />
+              <ListItemText primary={item.title} secondary={`총합: ${item.price}`} />
               <ListItemSecondaryAction>
                 <IconButton edge="end" onClick={() => removeFromCart(index)} aria-label="delete">
                   <DeleteIcon />
@@ -200,12 +215,22 @@ const UserForm = () => {
           ))}
           <Divider />
           <ListItem>
-            <Button color="primary" variant="contained" fullWidth onClick={handleCheckout}>
-              Pay (total: {totalPrice}원)
+            <Button variant="contained" fullWidth onClick={handleReadyToKakaoPay} startIcon={<img src={kakaoImage} alt="Kakao" style={{ width: 70, height: 24 }} />} sx={{
+              background: 'linear-gradient(45deg, #333 30%, #555 90%)',
+              borderRadius: 3,
+              border: 0,
+              color: 'white',
+              height: 48,
+              padding: '0 30px',
+              boxShadow: '0 3px 5px 2px rgba(50, 50, 50, .3)',
+            }}>
+              결제 (total: {totalPrice}원)
             </Button>
           </ListItem>
         </List>
       </Drawer>
+      {readyResponse && <div>Ready Response: {JSON.stringify(readyResponse)}</div>}
+       {error && <div>Error: {JSON.stringify(error)}</div>}
       <ChatModal open={openModal} onClose={handleCloseModal} />
       {/* <footer className="footer">
         <Typography variant="body2" color="textSecondary" align="center">
