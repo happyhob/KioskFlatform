@@ -1,6 +1,6 @@
 import React from "react";
 import {Box, Typography} from "@mui/material";
-import marketImage from '../../market.png';
+import marketImage from '../../image/market.png';
 
 const HomeForm =() => {
     return(

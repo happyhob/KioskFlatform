@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import QRCode from 'qrcode.react';
-import { Button, Divider } from '@mui/material';
+import { Button, Divider, Box, Typography } from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { saveQrCode } from '../../apis/auth.js';
 
@@ -29,28 +29,70 @@ function QrForm() {
   };
 
   return (
-    <div className="container mt-5">
-      <h1 className="mb-4">QR Code Generator</h1>
-      <div>
-        <Button variant="contained" color="primary" onClick={handleGenerateQr} style={{ marginBottom: '20px' }}>
-          Generate QR Code
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      bgcolor="#f5f5f5"
+    >
+      <Box
+        bgcolor="white"
+        p={4}
+        borderRadius={2}
+        boxShadow={3}
+        textAlign="center"
+      >
+        <Typography variant="h4" gutterBottom>
+          QR Code 생성기
+        </Typography>
+        <Button
+          variant="contained"
+          onClick={handleGenerateQr}
+          sx={{
+            background: 'linear-gradient(45deg, #333 30%, #555 90%)',
+            borderRadius: 3,
+            border: 0,
+            color: 'white',
+            height: 48,
+            padding: '0 30px',
+            boxShadow: '0 3px 5px 2px rgba(50, 50, 50, .3)',
+            marginBottom: '20px'
+          }}
+        >
+          QR Code 생성
         </Button>
         {qrCodeData && (
-          <div>
+          <Box>
             <QRCode value={qrCodeData} />
-            <Divider></Divider>
-            <Button variant="contained" color="success" onClick={handleSaveQr} style={{ marginTop: '10px' }}>
-              Save QR Code
+            <Divider sx={{ marginY: 2 }} />
+            <Button
+              variant="contained"
+              onClick={handleSaveQr}
+              sx={{
+                background: 'linear-gradient(45deg, #333 30%, #555 90%)',
+                borderRadius: 3,
+                border: 0,
+                color: 'white',
+                height: 48,
+                padding: '0 30px',
+                boxShadow: '0 3px 5px 2px rgba(50, 50, 50, .3)',
+                marginTop: '10px'
+              }}
+            >
+              QR Code 저장
             </Button>
-          </div>
+          </Box>
         )}
         {savedUrl && (
-          <div className="mt-3">
-            <p>QR 코드 URL: <a href={savedUrl} target="_blank" rel="noopener noreferrer">{savedUrl}</a></p>
-          </div>
+          <Box mt={3}>
+            <Typography>
+              QR 코드 URL: <a href={savedUrl} target="_blank" rel="noopener noreferrer">{savedUrl}</a>
+            </Typography>
+          </Box>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 
