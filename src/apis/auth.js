@@ -154,7 +154,7 @@ export const update = (data) => api.put("/users", data)
 export const remove = (userId) => api.delete(`/users/${userId}`)
 
 
-export const logout = () => api.post("/logout")
+export const logout = () => api.post("/admin/logout")
 
 export const session = () => api.get("/users/session")
 
