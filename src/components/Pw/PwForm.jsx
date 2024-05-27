@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import LoginForm from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal'
 import * as auth from '../../apis/auth';
-import * as Swal from '../../apis/alter';
+import * as Swal from '../../apis/alert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 

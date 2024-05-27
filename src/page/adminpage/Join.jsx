@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import Header from '../../components/AdminHeader/Header'
 import JoinForm from '../../components/Join/JoinForm'
 import * as auth from '../../apis/auth';
-import * as Swal from '../../apis/alter';
+import * as Swal from '../../apis/alert';
 import { LoginContext } from '../../Context/LoginContextProvider';
 import { useNavigate } from 'react-router-dom';
 

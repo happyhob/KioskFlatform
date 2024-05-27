@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as Swal from '../apis/alter';
+import * as Swal from '../apis/alert';
 import * as auth from '../apis/auth';
 
 
@@ -44,7 +44,7 @@ const LoginContextProvider = ({ children }) => {
     console.log(`data : ${data}` );
 
     // 인증 실패
-    if(response.statusCode == 401 ) {
+    if(response.statusCode === 401 ) {
       // 인증이 안되어 있는 경우,
       // 로그인 페이지로 이동 OR refresh token 고려
       // 로그인이 필요한 페이지인 경우, 로그인 페이지로 이동

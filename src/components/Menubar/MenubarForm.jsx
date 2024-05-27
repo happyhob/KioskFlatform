@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { LoginContext } from '../../Context/LoginContextProvider';
-import { alert } from "../../apis/alter"; // 수정된 import
+import { alert } from "../../apis/alert"; // 수정된 import
 import { useNavigate } from "react-router-dom";
 
 const MenubarForm = () => {
