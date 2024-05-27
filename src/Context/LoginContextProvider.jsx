@@ -28,7 +28,7 @@ const LoginContextProvider = ({ children }) => {
     let data
 
     if(isAuthPage ) {
-      navigate("/")
+      navigate("/home")
     }
     try {
       response = await auth.info()
@@ -39,19 +39,24 @@ const LoginContextProvider = ({ children }) => {
 
     // 응답실패 시, 세팅 ❌
     if( !response ) return
-
-    data = response.data
+    
+    data = response.responseData
     console.log(`data : ${data}` );
 
     // 인증 실패
-    if(response.status === 401 ) {
+    if(response.statusCode == 401 ) {
       // 인증이 안되어 있는 경우,
       // 로그인 페이지로 이동 OR refresh token 고려
       // 로그인이 필요한 페이지인 경우, 로그인 페이지로 이동
-      // navigate("/")
+      navigate("/home")
       console.error(`세션이 만료되었거나 인증에 실패하였습니다.`);
       return
     }
+    if (response.responseData) {
+    loginSetting(response.responseData);  // Passing the whole responseData object
+  } else {
+    console.error("No login data available");
+  }
     // ✅ 인증 성공
     // 정보 세팅
     loginSetting(data)
@@ -69,7 +74,8 @@ const LoginContextProvider = ({ children }) => {
     if( rememberId ) Cookies.set("rememberId", loginId)
     else Cookies.remove("rememberId")
 
-    try {
+    try 
+    {
       const {statusCode, responseData}  = await auth.login(loginId, password)
 
       console.log(responseData);
@@ -81,7 +87,9 @@ const LoginContextProvider = ({ children }) => {
         // 페이지 이동 ➡ "/" (메인)
         // TODO : 메인 화면으로 꼭 이동할 필요가 있을까?
         Swal.alert("로그인 성공", "메인 화면으로 이동합니다.", "success", () => { navigate("/home") })}
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       console.error(`error : ${error}`)
       // 로그인 실패
       // - 아이디 또는 비밀번호가 일치하지 않습니다.
@@ -104,21 +112,18 @@ const LoginContextProvider = ({ children }) => {
     }
 
     Swal.confirms("로그아웃하시겠습니까?", "로그아웃을 진행합니다.", "warning",
-        (result) => {
-          if( result.isConfirmed ) {
-            // 로그아웃 세팅
-            logoutSetting()
+      (result) => {if( result.isConfirmed ) {
+          // 로그아웃 세팅
+          logoutSetting()
 
-            // 페이지 이동 ➡ "/" (메인)
-            navigate("/home")
-          }
-        })
-
+          // 페이지 이동 ➡ "/" (메인)
+          navigate("/home")
+        }})
   }
 
   // 로그인 세팅
   const loginSetting = async (userData) => {
-
+    console.log(`userData= ${userData}`);
     const userId = userData.loginId;
     const userName = userData.userName;
 

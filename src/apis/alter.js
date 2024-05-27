@@ -55,3 +55,4 @@ export const confirms = (title, text, icon, callback) => {
     })
         .then( callback )
 }
+

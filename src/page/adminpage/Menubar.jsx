@@ -1,14 +1,14 @@
 import React from 'react'
-import QrForm from '../../components/QR/QRform'
 import Header from '../../components/AdminHeader/Header'
+import MenubarForm from '../../components/Menubar/MenubarForm'
 
-const QR = () => {
+const MenuBar = () => {
   return (
     <>
       <Header/>
-      <QrForm/>
+      <MenubarForm />
     </>
   )
 }
 
-export default QR
+export default MenuBar

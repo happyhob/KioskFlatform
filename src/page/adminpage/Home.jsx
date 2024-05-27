@@ -1,55 +1,20 @@
-//header Menu bar
-
-import React from 'react'
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import LoginForm from '../../components/Login/LoginForm';
-import { useNavigate } from 'react-router-dom';
-//https://mui.com/material-ui/react-app-bar/
-const Home=()=>{
-
-  const navigate = useNavigate();
-
-  const navigateToLogin = () => {
-    navigate("/login");
-  };
-  const navigateToJoin = () => {
-    navigate("/join");
-  };
-
-  const navigateToHome = () => {
-    navigate("/");
-  };
+import HomeForm from '../../components/Home/HomeForm'
+import Header from '../../components/AdminHeader/Header'
+import Footer from '../../components/Footer/Footer'
+const Home = () => {
+ 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Button variant="h6" component="div" sx={{ flexGrow: 3 }}
-          onClick={navigateToHome}>
-            Easy Make Kiosk 
-          </Button>
-          <Button color="inherit"
-          onClick={navigateToLogin}>Login</Button>
-          <Button color="inherit"
-          onClick={navigateToJoin}>Sign Up</Button>
-          
-        </Toolbar>
+      <AppBar position="static" sx={{ backgroundColor: 'white' }}>
+        <Header/>
+        <HomeForm/>
+        <Footer/>
       </AppBar>
     </Box>
-  )
-}
+  );
+};
+
 export default Home;
