@@ -10,6 +10,7 @@ import {
   Box,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import MicIcon from '@mui/icons-material/Mic';
 import axios from "axios";
 import ChatBubble from "./ChatBubble"; // ChatBubble 컴포넌트 임포트
 import BudgetModal from "./BudgetModal"; // 예산 입력 모달 컴포넌트 임포트
@@ -19,9 +20,10 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
   const [newMessage, setNewMessage] = useState("");
   const [isFirstInteraction, setIsFirstInteraction] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [budgetModalOpen, setBudgetModalOpen] = useState(false);
+  const [budgetModalOpen, setBudgetModalOpen] = useState(false); // 예산 모달 열림 상태
   const [typingText, setTypingText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [awaitingItemInput, setAwaitingItemInput] = useState(false);
   const userId = 2222; // 예시 ID 값, 실제 ID 값으로 대체
 
   useEffect(() => {
@@ -58,11 +60,12 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
       "ex)김치찌개에 대해서 설명해줘.",
       "ex)예산에 맞는 메뉴를 추천해줘.",
       "ex)다른 명령어는 뭐가 있어?",
+      "ex)장바구니에 물건을 담고 싶어",
     ];
 
     setMessages((prevMessages) => [
       ...prevMessages,
-      ...predefinedMessages.map((message, index) => ({
+      ...predefinedMessages.map((message) => ({
         text: message,
         sender: "user",
         clickable: true,
@@ -71,11 +74,7 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
     ]);
   };
 
-  const handleSendMessage = async (
-    messageText,
-    messageId = null,
-    paymentData = null
-  ) => {
+  const handleSendMessage = async (messageText, messageId = null, paymentData = null) => {
     if (isFirstInteraction) {
       setMessages([]);
       setIsFirstInteraction(false);
@@ -87,6 +86,17 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
       id_Value: messageId || userId,
       paymentData: paymentData || null,
     };
+
+    if (awaitingItemInput) {
+      const items = [messageText.replace(" 담아줘.", "").trim()]; // items 필드를 리스트로 설정
+      const addToCartRequest = {
+        user_id: userId,
+        items: items,
+      };
+      userMessage.items = addToCartRequest.items; // 올바른 형식으로 items 설정
+      userMessage.user_id = addToCartRequest.user_id;
+    }
+
     setMessages((prevMessages) => [
       ...prevMessages,
       { text: messageText, sender: "user" },
@@ -94,22 +104,25 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
     setLoading(true);
 
     try {
-      const endpoint = messageText.includes("장바구니에 담아줘")
-        ? "http://61.81.99.104:8000/users/addToCart"
+      const endpoint = awaitingItemInput
+        ? "http://localhost:8000/users/addToCart"
         : messageText === "ex)장바구니에 있는 물건들 결제해줘."
-        ? "http://61.81.99.104:8000/users/paymentAPI"
-        : "http://61.81.99.104:8000/users/ai";
+        ? "http://localhost:8000/users/paymentAPI"
+        : "http://localhost:8000/users/ai";
 
-      const response = await axios.post(endpoint, userMessage);
+      const requestData = awaitingItemInput ? { user_id: userId, items: userMessage.items } : userMessage;
+
+      const response = await axios.post(endpoint, requestData);
       const aiMessage = { text: response.data.message, sender: "ai" };
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
 
       // 클라이언트 측 장바구니에 아이템 추가
-      if (
-        endpoint === "http://61.81.99.104:8000/users/addToCart" &&
-        response.data.items
-      ) {
-        setCart((prevCart) => [...prevCart, ...response.data.items]);
+      if (endpoint === "http://localhost:8000/users/addToCart" && response.data.items) {
+        // 변경된 부분 시작
+        const productDetails = response.data.items.map(item => ({ title: item.product_name, price: item.price }));
+        setCart((prevCart) => [...prevCart, ...productDetails]);
+        // 변경된 부분 끝
+        setAwaitingItemInput(false); // 아이템 입력 대기 상태 해제
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -125,22 +138,13 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
   };
 
   const handleBudgetSubmit = (budget) => {
+    setBudgetModalOpen(false); // 예산 모달 닫기
     handleSendMessage(`예산에 맞는 메뉴를 추천해줘, 예산은 ${budget}원 이야.`);
   };
 
-  const extractItemsFromMessage = (message) => {
-    const regex = /(?:장바구니에 담아줘)(.*)/;
-    const match = message.match(regex);
-    if (match && match[1]) {
-      const items = match[1].split(",").map((item) => item.trim());
-      return items;
-    }
-    return [];
-  };
-
   const handleMessageClick = (message) => {
-    if (message.text === "예산에 맞는 메뉴를 추천해줘.") {
-      setBudgetModalOpen(true);
+    if (message.text === "ex)예산에 맞는 메뉴를 추천해줘.") {
+      setBudgetModalOpen(true); // 예산 모달 열기
     } else if (message.text === "ex)장바구니에 있는 물건들 결제해줘.") {
       const paymentData = {
         item_name: cart.map((item) => item.title).join(", "),
@@ -157,8 +161,6 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
           "ex)예산에 맞는 메뉴를 추천해줘.",
           "ex)장바구니에 있는 물건들 결제해줘.",
           "ex)된장찌게 장바구니에 담아줘",
-          "B",
-          "C",
         ];
 
         setMessages(
@@ -169,16 +171,40 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
           }))
         );
       }, 500); // 0.5초 후에 다른 명령어들 추가
-    } else if (message.text.includes("장바구니에 담아줘")) {
-      const items = extractItemsFromMessage(message.text);
-      handleSendMessage(
-        `{${items.join(", ")}} 을 장바구니에 담아줘`,
-        message.id_Value,
-        { items: items, user_id: userId }
-      );
+    } else if (message.text === "ex)장바구니에 물건을 담고 싶어") {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: "장바구니에 물건을 담는 것을 도와드릴께요! 어떤 물건을 담을까요?", sender: "ai", clickable: false },
+      ]);
+      setAwaitingItemInput(true); // 아이템 입력 대기 상태 설정
     } else {
       handleSendMessage(message.text, message.id_Value);
     }
+  };
+
+  const handleVoiceInput = () => {
+    if (!('webkitSpeechRecognition' in window)) {
+      alert('음성 인식을 지원하지 않는 브라우저입니다.');
+      return;
+    }
+
+    const recognition = new window.webkitSpeechRecognition();
+    recognition.lang = 'ko-KR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+
+    recognition.onresult = (event) => {
+      const speechResult = event.results[0][0].transcript;
+      const finalMessage = awaitingItemInput ? `${speechResult} 담아줘.` : speechResult;
+      setNewMessage(finalMessage);
+      handleSendMessage(finalMessage);
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error', event);
+    };
   };
 
   return (
@@ -252,14 +278,17 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
         >
           보내기
         </Button>
+        <Button onClick={handleVoiceInput} color="primary" variant="contained" endIcon={<MicIcon />} style={{ marginLeft: "8px" }}>
+          음성 입력
+        </Button>
         <Button onClick={onClose} color="primary" style={{ marginLeft: "8px" }}>
           닫기
         </Button>
       </DialogActions>
       <BudgetModal
-        open={budgetModalOpen}
-        onClose={() => setBudgetModalOpen(false)}
-        onSubmit={handleBudgetSubmit}
+        open={budgetModalOpen} // 예산 모달 열기 상태 전달
+        onClose={() => setBudgetModalOpen(false)} // 예산 모달 닫기 상태 전달
+        onSubmit={handleBudgetSubmit} // 예산 모달 제출 핸들러 전달
       />
     </Dialog>
   );
