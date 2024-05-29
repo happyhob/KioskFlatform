@@ -124,8 +124,8 @@ import QRCode from 'qrcode.react';
 import { Button, Divider, Box, Typography } from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { saveQrCode } from '../../apis/auth.js';
-import { LoginContext } from '../../Context/LoginContextProvider';
-import { alert } from "../../apis/alert"; // 수정된 import
+import { LoginContext } from '../../Context/LoginContextProvider.jsx';
+import { alert } from "../../apis/alert.js"; // 수정된 import
 import { useNavigate } from "react-router-dom";
 
 function QrForm() {
