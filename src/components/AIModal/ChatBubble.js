@@ -16,7 +16,7 @@ const ChatBubble = ({ message }) => {
       <Box 
         sx={{
           maxWidth: '70%',
-          bgcolor: isUser ? '#DCF8C6' : '#EDEEF0',
+          bgcolor: isUser ? '#fff' : '#e0e0e0',
           color: isUser ? '#000' : '#000',
           p: 2,
           borderRadius: 2,

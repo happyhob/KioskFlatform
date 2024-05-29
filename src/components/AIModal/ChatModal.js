@@ -8,12 +8,15 @@ import {
   Button,
   CircularProgress,
   Box,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import MicIcon from '@mui/icons-material/Mic';
 import axios from "axios";
-import ChatBubble from "./ChatBubble"; // ChatBubble 컴포넌트 임포트
+import ChatBubble from "./ChatBubble"; // Ensure this component is updated
 import BudgetModal from "./BudgetModal"; // 예산 입력 모달 컴포넌트 임포트
+import './ChatModal.css'; // Import the CSS file
 
 const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
   const [messages, setMessages] = useState([]);
@@ -25,6 +28,9 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [awaitingItemInput, setAwaitingItemInput] = useState(false);
   const userId = 2222; // 예시 ID 값, 실제 ID 값으로 대체
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     if (open && isFirstInteraction) {
@@ -118,10 +124,8 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
 
       // 클라이언트 측 장바구니에 아이템 추가
       if (endpoint === "http://localhost:8000/users/addToCart" && response.data.items) {
-        // 변경된 부분 시작
         const productDetails = response.data.items.map(item => ({ title: item.product_name, price: item.price }));
         setCart((prevCart) => [...prevCart, ...productDetails]);
-        // 변경된 부분 끝
         setAwaitingItemInput(false); // 아이템 입력 대기 상태 해제
       }
     } catch (error) {
@@ -211,20 +215,20 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
     <Dialog
       open={open}
       onClose={onClose}
-      fullWidth
-      maxWidth="sm"
+      fullScreen={fullScreen}
       PaperProps={{
+        className: 'dialog-paper',
         style: {
-          minHeight: "700px",
-          maxHeight: "700px",
-          minWidth: "500px",
-          maxWidth: "500px",
+          backgroundColor: '#f4eedd',
+          borderRadius: '15px',
         },
       }}
     >
-      <DialogTitle>{"AI 도우미 채팅"}</DialogTitle>
+      <DialogTitle className="dialog-title">
+        {"AI 도우미 채팅"}
+      </DialogTitle>
       <DialogContent style={{ padding: 0 }}>
-        <Box style={{ height: "500px", overflowY: "auto", padding: "16px" }}>
+        <Box style={{ height: "auto", overflowY: "auto", padding: "16px" }}>
           {messages.map((message, index) => (
             <Box
               key={index}
@@ -251,7 +255,7 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
           )}
         </Box>
       </DialogContent>
-      <DialogActions style={{ display: "flex", alignItems: "center" }}>
+      <DialogActions className="dialog-actions"style={{ backgroundColor: '#fff' }}>
         <TextField
           autoFocus
           margin="dense"
@@ -267,21 +271,32 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
               handleSendMessage(newMessage);
             }
           }}
-          style={{ flex: 1, marginRight: "8px" }}
+          className="text-field"
         />
         <Button
           onClick={() => handleSendMessage(newMessage)}
-          color="primary"
           variant="contained"
+          color="secondary"
+          className="button-contained-secondary"
           endIcon={<SendIcon />}
-          style={{ height: "100%" }}
         >
           보내기
         </Button>
-        <Button onClick={handleVoiceInput} color="primary" variant="contained" endIcon={<MicIcon />} style={{ marginLeft: "8px" }}>
+        <Button 
+          onClick={handleVoiceInput} 
+          variant="contained" 
+          color="secondary" 
+          className="button-contained-secondary"
+          endIcon={<MicIcon />} 
+        >
           음성 입력
         </Button>
-        <Button onClick={onClose} color="primary" style={{ marginLeft: "8px" }}>
+        <Button 
+          onClick={onClose}
+          variant="contained"
+          color="secondary" 
+          className="button-contained-secondary"
+        >
           닫기
         </Button>
       </DialogActions>
