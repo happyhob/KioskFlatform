@@ -369,10 +369,10 @@ const UserForm = () => {
 
   const handleReadyToKakaoPay = async () => {
     try {
-      const response = await axios.post('http://172.20.10.4:8080/payment/ready',{
+      const response = await axios.post('http://localhost:8088/payment/ready',{
         "item_name" :"hobinlee",
-        "quantity":"1", // 주문 수량은 정수로 전달
-        "total_amount":"100000" // 총 금액
+        "quantity":cart.length, // 주문 수량은 정수로 전달
+        "total_amount":totalPrice // 총 금액
       });
       setReadyResponse(response.data);
       // 리디렉션 URL 설정 (response.data.next_redirect_pc_url 또는 다른 URL 필드)
