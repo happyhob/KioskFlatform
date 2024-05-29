@@ -144,7 +144,7 @@ function QrForm() {
 
   const handleGenerateQr = () => {
     //const url = "http://192.168.55.73:3000/user";
-    const url = "http://61.81.99.105:3000/user";
+    const url = "http://localhost:3000/user";
     setQrCodeData(url);
   };
 
