@@ -57,8 +57,5 @@
     ]
     
   },
-  "overrides": {
-    "@svgr/webpack": "$@svgr/webpack"
-  },
-  "proxy": "http://localhost:8080"
+  "proxy": "http://61.81.99.104:8081"
 }

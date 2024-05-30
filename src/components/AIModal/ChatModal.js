@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -11,36 +12,46 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
-import MicIcon from '@mui/icons-material/Mic';
+import MicIcon from "@mui/icons-material/Mic";
 import axios from "axios";
-import ChatBubble from "./ChatBubble"; // Ensure this component is updated
-import BudgetModal from "./BudgetModal"; // 예산 입력 모달 컴포넌트 임포트
-import './ChatModal.css'; // Import the CSS file
+import ChatBubble from "./ChatBubble";
+import BudgetModal from "./BudgetModal";
+import useSpeechRecognition from "./useSpeechRecognition";
+import "./ChatModal.css";
 
 const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isFirstInteraction, setIsFirstInteraction] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [budgetModalOpen, setBudgetModalOpen] = useState(false); // 예산 모달 열림 상태
+  const [budgetModalOpen, setBudgetModalOpen] = useState(false);
   const [typingText, setTypingText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [awaitingItemInput, setAwaitingItemInput] = useState(false);
-  const userId = 2222; // 예시 ID 값, 실제 ID 값으로 대체
+  const userId = 2222;
 
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  useEffect(() => {
-    if (open && isFirstInteraction) {
-      setMessages([{ text: "", sender: "ai", clickable: false }]);
-      setIsFirstInteraction(false);
-      startTypingAnimation("안녕하세요! AI 도우미입니다. 무엇을 도와드릴까요?");
+  const {
+    startSpeechRecognition,
+    stopSpeechRecognition,
+    restartSpeechRecognition,
+    isListening,
+  } = useSpeechRecognition(
+    (speechResult) => {
+      const finalMessage = awaitingItemInput
+        ? `${speechResult} 담아줘.`
+        : speechResult;
+      setNewMessage(finalMessage);
+      handleSendMessage(finalMessage);
+    },
+    (event) => {
+      console.error("Speech recognition error", event);
     }
-  }, [open, isFirstInteraction]);
+  );
 
-  const startTypingAnimation = (text) => {
+  const startTypingAnimation = useCallback((text) => {
     setIsTyping(true);
     let index = 0;
     const interval = setInterval(() => {
@@ -57,14 +68,22 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
         setTypingText("");
         showNextMessages();
       }
-    }, 150); // 타이핑 속도 조절 (밀리초 단위)
-  };
+    }, 150);
+  }, []);
+
+  useEffect(() => {
+    if (open && isFirstInteraction) {
+      setMessages([{ text: "", sender: "ai", clickable: false }]);
+      setIsFirstInteraction(false);
+      startTypingAnimation("안녕하세요! AI 도우미입니다. 무엇을 도와드릴까요?");
+    }
+  }, [open, isFirstInteraction, startTypingAnimation]);
 
   const showNextMessages = () => {
     const predefinedMessages = [
-      "ex)오늘 날씨에 맞는 메뉴를 추천해줘.",
-      "ex)김치찌개에 대해서 설명해줘.",
-      "ex)예산에 맞는 메뉴를 추천해줘.",
+      "ex)오늘 날씨에 맞는 메뉴를 추천해 줘.",
+      "ex)김치찌개에 대해서 설명해 줘.",
+      "ex)예산에 맞는 메뉴를 추천해 줘.",
       "ex)다른 명령어는 뭐가 있어?",
       "ex)장바구니에 물건을 담고 싶어",
     ];
@@ -78,9 +97,25 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
         id_Value: userId,
       })),
     ]);
+
+    restartSpeechRecognition();
   };
 
-  const handleSendMessage = async (messageText, messageId = null, paymentData = null) => {
+  const speak = (text) => {
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "ko-KR"; // 한국어 설정
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.error("TTS is not supported in this browser.");
+    }
+  };
+
+  const handleSendMessage = async (
+    messageText,
+    messageId = null,
+    paymentData = null
+  ) => {
     if (isFirstInteraction) {
       setMessages([]);
       setIsFirstInteraction(false);
@@ -94,12 +129,12 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
     };
 
     if (awaitingItemInput) {
-      const items = [messageText.replace(" 담아줘.", "").trim()]; // items 필드를 리스트로 설정
+      const items = [messageText.replace(" 담아줘.", "").trim()];
       const addToCartRequest = {
         user_id: userId,
         items: items,
       };
-      userMessage.items = addToCartRequest.items; // 올바른 형식으로 items 설정
+      userMessage.items = addToCartRequest.items;
       userMessage.user_id = addToCartRequest.user_id;
     }
 
@@ -111,29 +146,42 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
 
     try {
       const endpoint = awaitingItemInput
-        ? "http://localhost:8000/users/addToCart"
+        ? "http://61.81.99.104:8000/users/addToCart"
         : messageText === "ex)장바구니에 있는 물건들 결제해줘."
-        ? "http://localhost:8000/users/paymentAPI"
-        : "http://localhost:8000/users/ai";
+        ? "http://61.81.99.104:8000/users/paymentAPI"
+        : "http://61.81.99.104:8000/users/ai";
 
-      const requestData = awaitingItemInput ? { user_id: userId, items: userMessage.items } : userMessage;
+      const requestData = awaitingItemInput
+        ? { user_id: userId, items: userMessage.items }
+        : userMessage;
 
       const response = await axios.post(endpoint, requestData);
       const aiMessage = { text: response.data.message, sender: "ai" };
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
 
-      // 클라이언트 측 장바구니에 아이템 추가
-      if (endpoint === "http://localhost:8000/users/addToCart" && response.data.items) {
-        const productDetails = response.data.items.map(item => ({ title: item.product_name, price: item.price }));
+      // AI 응답을 음성으로 출력
+      speak(response.data.message);
+
+      if (
+        endpoint === "http://61.81.99.104:8000/users/addToCart" &&
+        response.data.items
+      ) {
+        const productDetails = response.data.items.map((item) => ({
+          title: item.product_name,
+          price: item.price,
+        }));
         setCart((prevCart) => [...prevCart, ...productDetails]);
-        setAwaitingItemInput(false); // 아이템 입력 대기 상태 해제
+        setAwaitingItemInput(false);
       }
+
+      restartSpeechRecognition();
     } catch (error) {
       console.error("Error sending message:", error);
       setMessages((prevMessages) => [
         ...prevMessages,
         { text: "서버 응답 실패", sender: "ai" },
       ]);
+      restartSpeechRecognition();
     } finally {
       setLoading(false);
     }
@@ -142,13 +190,13 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
   };
 
   const handleBudgetSubmit = (budget) => {
-    setBudgetModalOpen(false); // 예산 모달 닫기
+    setBudgetModalOpen(false);
     handleSendMessage(`예산에 맞는 메뉴를 추천해줘, 예산은 ${budget}원 이야.`);
   };
 
   const handleMessageClick = (message) => {
     if (message.text === "ex)예산에 맞는 메뉴를 추천해줘.") {
-      setBudgetModalOpen(true); // 예산 모달 열기
+      setBudgetModalOpen(true);
     } else if (message.text === "ex)장바구니에 있는 물건들 결제해줘.") {
       const paymentData = {
         item_name: cart.map((item) => item.title).join(", "),
@@ -160,11 +208,11 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
       setMessages([]);
       setTimeout(() => {
         const otherCommands = [
-          "ex)오늘 날씨에 맞는 메뉴를 추천해줘.",
-          "ex)김치찌개에 대해서 설명해줘.",
-          "ex)예산에 맞는 메뉴를 추천해줘.",
-          "ex)장바구니에 있는 물건들 결제해줘.",
-          "ex)된장찌게 장바구니에 담아줘",
+          "ex)오늘 날씨에 맞는 메뉴를 추천해 줘.",
+          "ex)김치찌개에 대해서 설명해 줘.",
+          "ex)예산에 맞는 메뉴를 추천해 줘.",
+          "ex)장바구니에 있는 물건들 결제해 줘.",
+          "ex)장바구니에 물건을 담고 싶어",
         ];
 
         setMessages(
@@ -174,59 +222,48 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
             clickable: true,
           }))
         );
-      }, 500); // 0.5초 후에 다른 명령어들 추가
+      }, 500);
     } else if (message.text === "ex)장바구니에 물건을 담고 싶어") {
       setMessages((prevMessages) => [
         ...prevMessages,
-        { text: "장바구니에 물건을 담는 것을 도와드릴께요! 어떤 물건을 담을까요?", sender: "ai", clickable: false },
+        {
+          text: "장바구니에 물건을 담는 것을 도와드릴께요! 어떤 물건을 담을까요?",
+          sender: "ai",
+          clickable: false,
+        },
       ]);
-      setAwaitingItemInput(true); // 아이템 입력 대기 상태 설정
+      setAwaitingItemInput(true);
     } else {
       handleSendMessage(message.text, message.id_Value);
     }
   };
 
-  const handleVoiceInput = () => {
-    if (!('webkitSpeechRecognition' in window)) {
-      alert('음성 인식을 지원하지 않는 브라우저입니다.');
-      return;
+  useEffect(() => {
+    if (open) {
+      startSpeechRecognition();
+    } else {
+      stopSpeechRecognition();
     }
-
-    const recognition = new window.webkitSpeechRecognition();
-    recognition.lang = 'ko-KR';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.start();
-
-    recognition.onresult = (event) => {
-      const speechResult = event.results[0][0].transcript;
-      const finalMessage = awaitingItemInput ? `${speechResult} 담아줘.` : speechResult;
-      setNewMessage(finalMessage);
-      handleSendMessage(finalMessage);
-    };
-
-    recognition.onerror = (event) => {
-      console.error('Speech recognition error', event);
-    };
-  };
+  }, [open, startSpeechRecognition, stopSpeechRecognition]);
 
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={() => {
+        setMessages([]);
+        setIsFirstInteraction(true);
+        stopSpeechRecognition();
+        onClose();
+      }}
       fullScreen={fullScreen}
       PaperProps={{
-        className: 'dialog-paper',
         style: {
-          backgroundColor: '#f4eedd',
-          borderRadius: '15px',
+          backgroundColor: "#f4eedd",
+          borderRadius: "15px",
         },
       }}
     >
-      <DialogTitle className="dialog-title">
-        {"AI 도우미 채팅"}
-      </DialogTitle>
+      <DialogTitle className="dialog-title">{"AI 도우미 채팅"}</DialogTitle>
       <DialogContent style={{ padding: 0 }}>
         <Box style={{ height: "auto", overflowY: "auto", padding: "16px" }}>
           {messages.map((message, index) => (
@@ -255,7 +292,10 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
           )}
         </Box>
       </DialogContent>
-      <DialogActions className="dialog-actions"style={{ backgroundColor: '#fff' }}>
+      <DialogActions
+        className="dialog-actions"
+        style={{ backgroundColor: "#fff" }}
+      >
         <TextField
           autoFocus
           margin="dense"
@@ -274,36 +314,27 @@ const ChatModal = ({ open, onClose, cart, totalAmount, setCart }) => {
           className="text-field"
         />
         <Button
-          onClick={() => handleSendMessage(newMessage)}
+          onClick={startSpeechRecognition}
           variant="contained"
           color="secondary"
           className="button-contained-secondary"
-          endIcon={<SendIcon />}
-        >
-          보내기
-        </Button>
-        <Button 
-          onClick={handleVoiceInput} 
-          variant="contained" 
-          color="secondary" 
-          className="button-contained-secondary"
-          endIcon={<MicIcon />} 
+          endIcon={<MicIcon />}
         >
           음성 입력
         </Button>
-        <Button 
+        <Button
           onClick={onClose}
           variant="contained"
-          color="secondary" 
+          color="secondary"
           className="button-contained-secondary"
         >
           닫기
         </Button>
       </DialogActions>
       <BudgetModal
-        open={budgetModalOpen} // 예산 모달 열기 상태 전달
-        onClose={() => setBudgetModalOpen(false)} // 예산 모달 닫기 상태 전달
-        onSubmit={handleBudgetSubmit} // 예산 모달 제출 핸들러 전달
+        open={budgetModalOpen}
+        onClose={() => setBudgetModalOpen(false)}
+        onSubmit={handleBudgetSubmit}
       />
     </Dialog>
   );
