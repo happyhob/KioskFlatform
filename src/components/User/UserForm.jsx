@@ -382,8 +382,10 @@ const UserForm = () => {
     }
   };
 
+
+  //수정 완료
   const updateTotalPrice = (currentCart) => {
-    const total = currentCart.reduce((sum, item) => sum + item.price, 0);
+    const total = currentCart.reduce((sum, item) => sum + parseFloat(item.price), 0);
     setTotalPrice(total);
   };
 
